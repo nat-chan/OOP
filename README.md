@@ -42,7 +42,7 @@
    * [GraphTemplate.java](./kadai2/setumonn4-5/GraphTemplate.java)
    * [ParabolaGraph.java](./kadai2/setumonn4-5/ParabolaGraph.java)
    * [ParabolaGraph2.java](./kadai2/setumonn4-5/ParabolaGraph2.java)
- * [bin](./bin)
+ * [bin](./bin) 各種便利ツールをここに置く
    * [seikei.vim](./bin/seikei.vim)
    * [indent.vim](./bin/indent.vim)
    * [tree2markdown.sh](./bin/tree2markdown.sh)
