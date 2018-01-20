@@ -2,9 +2,12 @@
 *.class
 # /kadai1
 
-#emacsのバックアップファイル
+# emacsのバックアップファイル
 *~
 \#*\#
+
+# vimのマクロ
+*.vim
 
 # 前田先生がpublic_htmlにzipを置いているので追加
 *.bak
