@@ -353,7 +353,7 @@ borage36:~ maeda$ java SimpleViewTriangle > tri.dat
 borage36:~ maeda$ ~maeda/oo/plot.sh tri.dat
 ```
 
-![線で描く３角](tri.png)
+![線で描く３角](../oo/tri.png)
 
 SimpleView.javaを提出しなさい．
 
@@ -403,7 +403,7 @@ borage36:~ maeda$ java DotViewTriangle > tri-dot.dat
 borage36:~ maeda$ ~maeda/oo/plot-dot.sh tri-dot.dat
 ```
 
-![点で描く３角](tri-dot.png)
+![点で描く３角](../oo/tri-dot.png)
 
 **DotView.javaを提出しなさい．**
 
@@ -490,7 +490,7 @@ borage36:~ maeda$ ~maeda/oo/plot.sh hil.dat
 borage36:~ maeda$ 
 ```
 
-![線で描くヒルベルト曲線](hil.png) ``
+![線で描くヒルベルト曲線](../oo/hil.png) ``
 
 ``` {.interaction}
 borage36:~ maeda$ java -cp ~maeda/oo:. Hilbert --dot > hil-dot.dat
@@ -498,14 +498,14 @@ borage36:~ maeda$ ~maeda/oo/plot-dot.sh hil-dot.dat
 borage36:~ maeda$ 
 ```
 
-![点で描くヒルベルト曲線](hil-dot.png) ``
+![点で描くヒルベルト曲線](../oo/hil-dot.png) ``
 
 ``` {.interaction}
 borage36:~ maeda$ java -cp ~maeda/oo:. Hilbert --screen
 borage36:~ maeda$ 
 ```
 
-![ヒルベルト曲線スクショ](hil-screenshot.png){width="50%"}
+![ヒルベルト曲線スクショ](../oo/hil-screenshot.png){width="50%"}
 
 ------------------------------------------------------------------------
 

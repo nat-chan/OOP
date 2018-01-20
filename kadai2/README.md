@@ -548,7 +548,7 @@ borage36:~ maeda$ ~maeda/oo/plot-dot.sh para.dat
 borage36:~ maeda$ 
 ```
 
-![parabola](parabola-screenshot.png){width="50%"}
+![parabola](../oo/parabola-screenshot.png){width="50%"}
 
 **ParabolaGraph2.java を提出しなさい．**
 
