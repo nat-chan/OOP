@@ -1,0 +1,1 @@
+../oo/inheritance.md
