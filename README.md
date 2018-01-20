@@ -1,7 +1,7 @@
 # OOP
 
 ディレクトリ構造の説明
- * [coding-style.link](./coding-style.link) javaの標準的なコーディング規約
+ * [CodingStyle.pdf](./CodingStyle.pdf) javaの標準的なコーディング規約
  * [who_did_it.txt](./who_did_it.txt) 誰がどの設問を解いたか
  * [bin](./bin) 各種便利ツールをここに置く
    * [seikei.vim](./bin/seikei.vim)
