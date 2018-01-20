@@ -1,0 +1,40 @@
+ローカルとリモートが競合した状態でgit pullしたらどうなるか
+
+競合をコミットせずにgit pullしてみる
+$ git pull
+remote: Counting objects: 3, done.
+remote: Compressing objects: 100% (1/1), done.
+Unpacking objects: 100% (3/3), done.
+remote: Total 3 (delta 1), reused 3 (delta 1), pack-reused 0
+From http://github.com/nat-chan/OOP
+   64e178b..420455f  master     -> origin/master
+Updating 64e178b..420455f
+error: Your local changes to the following files would be overwritten by merge:
+        a
+Please, commit your changes or stash them before you can merge.
+Aborting
+
+競合をコミットしてgitpullしてみる
+$ git add a
+$ git commit -m "hoge"
+$ git pull
+Auto-merging a
+CONFLICT (content): Merge conflict in a
+Automatic merge failed; fix conflicts and then commit the result.
+
+$git diff
+diff --cc a
+index 6178079,7898192..0000000
+--- a/a
++++ b/a
+@@@ -1,1 -1,1 +1,5 @@@
+++<<<<<<< HEAD
+ +b
+ ++=======
+ + a
+ ++>>>>>>> 420455f4ae0aab76d2dffa08ec4c1563b43d0864
+
+git pull -fはないのでこうする
+$ git fetch origin master #リモートの最新を取ってくる
+$ git reset --hard origin/master #ローカルのmasterを、リモート追跡のmasterに強制的に合わせる！
+
