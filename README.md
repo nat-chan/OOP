@@ -1,4 +1,4 @@
-# OOP
+# Object-Oriented Programing
 
 ディレクトリ構造の説明
  * [CodingStyle.pdf](./CodingStyle.pdf) javaの標準的なコーディング規約
@@ -30,8 +30,8 @@
      * [ParabolaGraph2.java](./kadai2/setumonn4-5/ParabolaGraph2.java)
  * [kadai3](./kadai3)
    * [url.txt](./kadai3/url.txt)
-   * [setumonn3-4](./kadai3/setumonn3-4)
    * [setumonn1-2](./kadai3/setumonn1-2)
+   * [setumonn3-4](./kadai3/setumonn3-4)
    * [CircleTest.java](./kadai3/setumonn1-2/CircleTest.java)
    * [Shape.java](./kadai3/setumonn1-2/Shape.java)
    * [CircleShape.java](./kadai3/setumonn1-2/CircleShape.java)
