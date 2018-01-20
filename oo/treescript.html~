@@ -1,0 +1,454 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML i18n//EN">
+<!-- $Id: q8.shtml,v 1.1 2010/01/27 13:06:21 maeda Exp $ -->
+<html lang="ja-JP">
+<head>
+<link rel="stylesheet" href="/~maeda/class/simple.css" type="text/css">
+<meta http-equiv="Content-type" content="text/html; charset=utf8">
+<title>オブジェクト指向プログラミング実習 個人課題3</title>
+</head>
+
+
+<body bgcolor = "#fffff0">
+
+<a name="top">
+<h1>オブジェクト指向プログラミング実習 個人課題3</h1>
+</a>
+
+<u><b>(注意: 個人課題では，他の人の作った結果を利用しないこと!)</b></u>
+
+<h2>ツリー指向スクリプト言語</h2>
+
+以下のプログラムは，<a href="stack-and-tree.html">課題５</a>のTreeCalc
+と少し似ているが，トークン単位で読み込むのではなく，<b>式全体を読み込んでから
+値を計算(eval)する</b>ところが違っている．入力する式の文法は，以下のようになっている．
+<ul>
+<li>
+カッコ( … )に３つの要素をくくって，式のノード(節点)を表す．
+３つの要素は左から順に，演算子名，左の子，右の子である．
+(すなわち，式の木を<b>行きがけ順(preorder)</b>で表している．)
+</li>
+<li>
+カッコを用いない整数や名前は葉を表す．
+</li>
+<li>
+カッコは，空白（スペース，タブ，改行など）で区切る必要がある．
+</li>
+</ul>
+
+<code><pre class="program">
+import java.util.*;
+
+public class TreeScript {
+    abstract class Tree {
+        abstract public Tree eval(); // 木の値を計算する
+        abstract public Tree replace(String name, Tree r); // 木の中の名前nameをrに置き換える
+    }
+
+    class IntLeaf extends Tree {
+        int value;
+        IntLeaf(int value) { this.value = value; }
+        public Tree eval() { return this; }
+        public Tree replace(String name, Tree r) { return this; } // 置き換えは起きない
+        public String toString() { return Integer.toString(value); }
+    }
+    class NameLeaf extends Tree {
+        String name;
+        NameLeaf(String name) { this.name = name; }
+        public Tree eval() { return this; }
+        public Tree replace(String name, Tree r) { 
+            return name.equals(this.name) ? r : this; // 名前が同じなら置き換える
+        }
+        public String toString() { return name; }
+    }
+    class Node extends Tree {
+        Op operator;
+        Tree left, right;
+        Node(Op operator, Tree left, Tree right) {
+            this.operator = operator;
+            this.left = left; this.right = right;
+        }
+        public Tree replace(String name, Tree r) {
+            return operator.replace(this, left, right, name, r); // Op によって置き換えの仕方を変えることができる
+        }
+        public Tree eval() {
+            return operator.calc(left, right);
+        }
+        public String toString() {
+            return "( " + operator.opName() + " " + left.toString() + " " + right.toString() + " )";
+        }
+    }
+    abstract class Op {
+        abstract Tree calc(Tree left, Tree right);
+        abstract String opName();
+        Tree replace(Node original, Tree left, Tree right, String name, Tree r) {
+            return new Node(this, left.replace(name, r), right.replace(name, r)); // Nodeをコピーし，左右の子を再帰的にreplaceする
+        }
+    }
+
+    abstract class BinOp extends Op{
+        // 整数の計算をする２項演算子
+        abstract public int op(int rand1, int rand2);
+        public Tree calc(Tree left, Tree right) {
+            int l = ((IntLeaf)left.eval()).value;
+            int r = ((IntLeaf)right.eval()).value;
+            return new IntLeaf(op(l, r));
+        }
+    }
+    class AddOp extends BinOp {
+        public String opName() { return "+"; }
+        public int op(int rand1, int rand2) { return rand1 + rand2; }
+    }
+    class SubOp extends BinOp {
+        public String opName() { return "-"; }
+        public int op(int rand1, int rand2) { return rand1 - rand2; }
+    }
+    class MulOp extends BinOp {
+        public String opName() { return "*"; }
+        public int op(int rand1, int rand2) { return rand1 * rand2; }
+    }
+    class DivOp extends BinOp {
+        public String opName() { return "/"; }
+        public int op(int rand1, int rand2) { return rand1 / rand2; }
+    }
+    // 特別な演算子
+    class FunOp extends Op {
+        // ( fun param bodyTree ) という形．左の子paramはNameLeafに限る．
+        public String opName() { return "fun"; }
+        public Tree calc(Tree left, Tree right) { 
+            return new Node(this, left, right); // 自分と同じものを返す
+        }
+    }
+    class CallOp extends Op {
+        // ( call Fun Tree ) という形．左の子をevalした値は，FunOpを持つノードに限る．
+        public String opName() { return "call"; }
+        public Tree calc(Tree left, Tree right) {
+            // 左の子をevalした値は，FunOpを持つノードでなければならない．
+            Node fun = (Node) left.eval();
+            NameLeaf param = (NameLeaf) fun.left;
+            Tree body = fun.right;
+            // funのbodyTree内のparamを，rightに置き換える
+            Tree expression = body.replace(param.name, right);
+            System.out.println("置換: " + expression.toString());
+            // bodyをevalした値を返す．
+            return expression.eval();
+        }
+    }
+    // 命令一覧表
+    Op[] optable = {new AddOp(), new SubOp(), new MulOp(), new DivOp(),
+                    new FunOp(), new CallOp()};
+    Scanner scanner;
+    Map&lt;String, Op&gt; ops;
+    TreeScript() {
+        scanner = new Scanner(System.in);
+        ops = new HashMap&lt;String, Op&gt;();
+        // 辞書に命令語を登録する．
+        for (Op op : optable) {
+            ops.put(op.opName(), op);
+        }
+    }
+    
+    public Tree parse() {
+        if (scanner.hasNextInt()) {
+            return new IntLeaf(scanner.nextInt());
+        } else if (scanner.hasNext("\\(")) {
+            scanner.next();               // "("を読み飛ばす．
+            String name = scanner.next(); // オペレータの名前
+            Tree left = parse();          // 左の子
+            Tree right = parse();         // 右の子
+            scanner.next("\\)");          // ")" を読み飛ばす
+            return new Node(ops.get(name), left, right);
+        } else {
+            return new NameLeaf(scanner.next());
+        }
+    }
+    public void run() {
+        while (scanner.hasNext()) {
+            try {
+                Tree t = parse();
+                System.out.println("式: " + t.toString());
+                System.out.println(t.eval());
+            } catch (Exception e) {
+                System.out.println("エラー");
+                e.printStackTrace(System.out);
+            }
+        }
+    }
+    public static void main(String[] args) {
+        new TreeScript().run();
+    }
+}
+</pre></code>
+
+<h4>実行例: </h4>
+
+<p>
+(<u>下線</u>が入力, <font color="green">緑字</font>は注釈．)
+<code><pre class="interaction">
+$ <u>java TreeScript</u>
+<u>( + 3 8 )</u>
+式: ( + 3 8 )
+11
+
+<u>( + 5 ( * 3 7 ) )</u>
+式: ( + 5 ( * 3 7 ) )
+26
+
+<u>3</u>
+式: 3
+3             <font color="green">← 整数を入れると，そのまま整数が値になる</font>
+
+<u>abc</u>
+式: abc
+abc           <font color="green">← 名前を入れると，そのまま名前が値になる</font>
+
+^D            <font color="green">← 行の先頭でControl-Dを入力</font>
+$ 
+</pre></code>
+
+また，TreeScript には，式の中の変数を，別の式で置き換えてから計算する機能がある．
+「( fun 変数 E )」という形の式は，「Eの中で使っている変数を，他の式に置き換える」
+ことを期待しており，数学でいう関数のような役割をする．
+<p>
+「( call 関数 引数 )」という形の式は，関数の中の変数を「引数」で置き換える．
+
+<h4>実行例: </h4>
+
+<p>
+(<u>下線</u>が入力, <font color="green">緑字</font>は注釈．)
+<code><pre class="interaction">
+$ <u>java TreeScript</u>
+<u>( call ( fun x ( * x x ) ) 3 )</u>
+式: ( call ( fun x ( * x x ) ) 3 )
+置換: ( * 3 3 )                       <font color="green">← ( * x x ) の中のxが，3で置き換えられた</font>
+9
+$ 
+</pre></code>
+
+「( call 関数 引数 )」という形が，式の中に複数出てきた場合は，
+<u>一番左側のcallから順に</u>置き換えが起きる．
+
+<h4>実行例: </h4>
+
+<p>
+(<u>下線</u>が入力, <font color="green">緑字</font>は注釈．)
+<code><pre class="interaction">
+$ <u>java TreeScript</u>
+
+<u>( call ( fun square ( call square 3 ) )
+       ( fun x ( * x x ) ) )</u>
+式: ( call ( fun square ( call square 3 ) ) ( fun x ( * x x ) ) )
+置換: ( call ( fun x ( * x x ) ) 3 )   <font color="green">← squareが( fun x ( * x x ) )に置き換わった</font>
+置換: ( * 3 3 )                        <font color="green">← xが3で置き換えられた</font>
+9
+$ 
+</pre></code>
+
+２つの引数を受け取る関数のようなものを作りたい場合は，callとfunを２組使って，１つずつ置き換えを行っていく．１引数関数を組み合わせて，多引数関数を模倣するわけである．
+
+<h4>実行例: </h4>
+
+<p>
+(<u>下線</u>が入力, <font color="green">緑字</font>は注釈．)
+<code><pre class="interaction">
+$ <u>java TreeScript</u>
+( call
+   ( call
+      ( fun x ( fun y ( / ( + x y ) 2 ) ) ) <font color="green">←xとyの平均を計算する式</font>
+      5 )
+    9 )
+
+式: ( call ( call ( fun x ( fun y ( / ( + x y ) 2 ) ) ) 5 ) 9 )
+置換: ( fun y ( / ( + 5 y ) 2 ) )          <font color="green">←まずxが5に置き換わった．</font>
+置換: ( / ( + 5 9 ) 2 )                    <font color="green">←次にyが7に置き換わった．</font>
+7
+</pre></code>
+<hr />
+<h2>設問(基本レベル): 条件分岐</h2>
+2つの整数を受け取り，等しいかどうかを判定する演算子「==」(EqOp)をTreeScript に加えた
+TreeScript1を作りなさい．ただし，返す値は次のようにしなさい．
+<ul>
+<li>等しい場合は，「式 ( fun left ( fun right left ) ) を入力した時にできるのと同じ形の木」を返す．
+</li>
+<li>等しくない場合は，「式 ( fun left ( fun right right ) ) を入力した時にできるのと同じ形の木」を返す．
+</li>
+</ul>
+上記のような式を入力すると，どういうツリーが作られるかよく考えること．
+<p>
+
+<h4>実行例: </h4>
+
+(<u>下線</u>が入力, <font color="green">緑字</font>は注釈．)
+<code><pre class="interaction">
+$ <u>java TreeScript1</u>
+<u>( == ( + 1 1 ) 2 )</u>
+式: ( == ( + 1 1 ) 2 )
+( fun left ( fun right left ) )   <font color="green">←結果が真の時の値</font>
+
+<u>( == ( + 1 1 ) 0 )</u>
+式: ( == ( + 1 1 ) 0 )
+( fun left ( fun right right ) )  <font color="green">←結果が偽の時の値</font>
+
+<u>( call ( call ( == 1 1 ) ( * 3 3 ) ) ( * 5 5 ) )</u>   <font color="green">← 条件式に，２つの引数( * 3 3 )と( * 5 5 )を与える</font>
+式: ( call ( call ( == 1 1 ) ( * 3 3 ) ) ( * 5 5 ) )
+置換: ( fun right ( * 3 3 ) )
+置換: ( * 3 3 )                                           <font color="green">←左の式( * 3 3 )が選ばれた</font>
+9
+
+<u>( call ( call ( == 0 1 ) ( * 3 3 ) ) ( * 5 5 ) )</u>
+式: ( call ( call ( == 0 1 ) ( * 3 3 ) ) ( * 5 5 ) )
+置換: ( fun right right )
+置換: ( * 5 5 )                                           <font color="green">←右の式( * 5 5 )が選ばれた</font>
+25
+</pre></code>
+<u><b>TreeScript1.javaを提出しなさい．</b></u>
+<p>
+すべてのチーム課題に加えて，基本レベルまで解答すれば合格とする．
+<hr />
+<h2>設問(発展レベル): グローバルな名前の定義</h2>
+
+基本レベルに加えて，名前nameと式Eを受け取り，式Eを評価して，それを値とする名前nameを定義する「def」演算子(DefOp)を
+TreeScript1に加えたTreeScript2を作りなさい．def 演算子の値は，第1引数の名前を返すようにしなさい．
+<h4>実行例: </h4>
+
+(<u>下線</u>が入力, <font color="green">緑字</font>は注釈．)
+<code><pre class="interaction">
+$ <u>java TreeScript2</u>
+<u>( def three 3 )</u>
+式: ( def three 3 )
+three  <font color="green">←変数 three が定義された</font>
+
+<u>three</u>
+式: three
+3      <font color="green">←変数 three の値は3</font>
+
+<u>( def square
+      ( fun x ( * x x ) ) )</u>
+式: ( def square ( fun x ( * x x ) ) )
+square  <font color="green">←変数 square が定義された</font>
+
+<u>( call square three )</u>
+式: ( call square three )      <font color="green">←変数 square の値は2乗する関数</font>
+置換: ( * three three )
+9
+
+<u>
+( def fact
+      ( fun n
+       ( call ( call ( == n 0 ) 1 )
+              ( * n ( call fact ( - n 1 ) ) ) ) ) )</u>
+
+式: ( def fact ( fun n ( call ( call ( == n 0 ) 1 ) ( * n ( call fact ( - n 1 ) ) ) ) ) )
+fact
+
+<u>( call fact 10 )</u>
+式: ( call fact 10 )
+置換: ( call ( call ( == 10 0 ) 1 ) ( * 10 ( call fact ( - 10 1 ) ) ) )
+置換: ( fun right right )
+置換: ( * 10 ( call fact ( - 10 1 ) ) )
+置換: ( call ( call ( == ( - 10 1 ) 0 ) 1 ) ( * ( - 10 1 ) ( call fact ( - ( - 10 1 ) 1 ) ) ) )
+<font color="green">(略)</font>
+置換: ( call ( call ( == ( - ( - ( - ( - ( - ( - ( - ( - ( - ( - 10 1 ) 1 ) 1 ) 1 ) 1 ) 1 ) 1 ) 1 ) 1 ) 1 ) 0 ) 1 ) ( * ( - ( - ( - ( - ( - ( - ( - ( - ( - ( - 10 1 ) 1 ) 1 ) 1 ) 1 ) 1 ) 1 ) 1 ) 1 ) 1 ) ( call fact ( - ( - ( - ( - ( - ( - ( - ( - ( - ( - ( - 10 1 ) 1 ) 1 ) 1 ) 1 ) 1 ) 1 ) 1 ) 1 ) 1 ) 1 ) ) ) )
+置換: ( fun right 1 )
+置換: 1
+3628800
+</pre></code>
+<u><b>TreeScript2.javaを提出しなさい．</b></u>
+(TreeScript2.javaを提出する場合，TreeScript1.javaは提出しなくてよい．
+部分的に動いている場合は，どこまで動いているか明記すること．)
+<p>
+
+<hr />
+<h2>設問(高度レベル): 名前の衝突の回避</h2>
+
+TreeScript2では，たまたま同じ名前の変数が２つ出てくると，不都合が生じることがある．
+<h4>実行例: </h4>
+
+(<u>下線</u>が入力, <font color="green">緑字</font>は注釈．)
+<code><pre class="interaction">
+$ <u>java TreeScript2</u>
+<font color="green">問題点1</font>
+( call ( fun x ( call ( fun x ( + x x ) )    <font color="green">← 外側と内側の２つのxが存在する．</font>
+                      ( + x 1 ) ) )
+       2 )
+
+式: ( call ( fun x ( call ( fun x ( + x x ) ) ( + x 1 ) ) ) 2 )
+置換: ( call ( fun 2 ( + 2 2 ) ) ( + 2 1 ) ) <font color="green">← 外側のxを置き換えるはずが，内側のxまで，すべて2に置き換わってしまった．</font>
+エラー                                       <font color="green">← ( fun 2 ... )という形の式は正しくないのでエラー．</font>
+java.lang.ClassCastException: TreeScript2$IntLeaf cannot be cast to TreeScript$NameLeaf
+at TreeScript$CallOp.calc(TreeScript.java:89)
+at <font color="green">(略)</font>
+
+( * y y )
+式: ( * y y )        <font color="green">← yを評価するとyになるが…</font>
+エラー               <font color="green">← *演算子の引数は整数でなければならない．</font>
+java.lang.ClassCastException: TreeScript2$EnvNameLeaf cannot be cast to TreeScript$IntLeaf
+at TreeScript$BinOp.calc(TreeScript.java:54)
+at <font color="green">(略)</font>
+
+<font color="green">問題点2</font>
+( call ( fun x ( call ( fun y x )      <font color="green">← 外側の(評価するとyになる)yと，内側のyの２つがある</font>
+                      2 ) )
+       ( * y y ) )                     <font color="green">← ( * y y )はエラーになるはずである．</font>
+
+式: ( call ( fun x ( call ( fun y x ) 2 ) ) ( * y y ) )
+置換: ( call ( fun y ( * y y ) ) 2 )   <font color="green">← ( * y y )が，内側のyのスコープに入ってしまった．</font>
+置換: ( * 2 2 )                        <font color="green">←外側にあったyが，内側のyと解釈されてしまった．</font>
+4
+</pre></code>
+
+問題点1か問題点2か，あるいはその両方を解決したTreeScript3 を作りなさい．
+
+<h4>実行例: </h4>
+
+(<u>下線</u>が入力, <font color="green">緑字</font>は注釈．)
+<code><pre class="interaction">
+$ <u>java TreeScript3</u>
+<font color="green">問題点1の解決</font>
+java TreeScript3
+( call ( fun x ( call ( fun x ( + x x ) )    <font color="green">← 外側と内側の２つのxが存在する．</font>
+                      ( + x 1 ) ) )
+       2 )
+式: ( call ( fun x ( call ( fun x ( + x x ) ) ( + x 1 ) ) ) 2 )
+置換: ( call ( fun x ( + x x ) ) ( + 2 1 ) ) <font color="green">← 外側のxだけが2に置き換わった．</font>
+置換: ( + ( + 2 1 ) ( + 2 1 ) )
+6
+
+<font color="green">問題点2の解決</font>
+( call ( fun x ( call ( fun y x )
+                      2 ) )
+       ( * y y ) )                                 <font color="green">← このyには値がない</font>
+式: ( call ( fun x ( call ( fun y x ) 2 ) ) ( * y y ) )
+置換: ( call ( fun y ( * &lt;error&gt; &lt;error&gt; ) ) 2 )   <font color="green">← 値がないyを，内側のyのスコープに持ち込もうとした際に&lt;error&gt;というシンボルに置き換えた</font>
+置換: ( * &lt;error&gt; &lt;error&gt; )
+エラー                                            <font color="green">← 整数でないのでエラー</font>
+java.lang.ClassCastException: TreeScript3$NameLeaf cannot be cast to TreeScript$IntLeaf
+at TreeScript$BinOp.calc(TreeScript.java:54)
+at <font color="green">(略)</font>
+
+<font color="green">defを使わない再帰的呼び出し</font>
+( call
+  ( call
+    ( fun f ( call ( fun x ( call f ( call x x ) ) )
+                   ( fun x ( call f ( call x x ) ) ) ) )
+    ( fun fact
+      ( fun n
+       ( call ( call ( == n 0 ) 1 )
+              ( * n ( call fact ( - n 1 ) ) ) ) ) )
+   )
+5 )
+式: ( call ( call ( fun f ( call ( fun x ( call f ( call x x ) ) ) ( fun x ( call f ( call x x ) ) ) ) ) ( fun fact ( fun n ( call ( call ( == n 0 ) 1 ) ( * n ( call fact ( - n 1 ) ) ) ) ) ) ) 5 )
+置換: ( call ( fun x ( call ( fun fact ( fun n ( call ( call ( == n 0 ) 1 ) ( * n ( call fact ( - n 1 ) ) ) ) ) ) ( call x x ) ) ) ( fun x ( call ( fun fact ( fun n ( call ( call ( == n 0 ) 1 ) ( * n ( call fact ( - n 1 ) ) ) ) ) ) ( call x x ) ) ) )
+置換: ( call ( fun fact ( fun n ( call ( call ( == n 0 ) 1 ) ( * n ( call fact ( - n 1 ) ) ) ) ) ) ( call ( fun x ( call ( fun fact ( fun n ( call ( call ( == n 0 ) 1 ) ( * n ( call fact ( - n 1 ) ) ) ) ) ) ( call x x ) ) ) ( fun x ( call ( fun fact ( fun n ( call ( call ( == n 0 ) 1 ) ( * n ( call fact ( - n 1 ) ) ) ) ) ) ( call x x ) ) ) ) )
+<font color="green">(略)</font>
+120
+</pre></code>
+<p>
+<u><b>TreeScript3.javaを提出しなさい．</b></u>
+(TreeScript3.javaを提出する場合，TreeScript1.java, TreeScript2.javaは提出しなくてよい．
+部分的に動いている場合は，どこまで動いているか明記すること．)
+
+<br><br><br><br><br><br>
+
+</body>
+
+</html>

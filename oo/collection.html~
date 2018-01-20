@@ -1,0 +1,868 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML i18n//EN">
+<!-- $Id: q8.shtml,v 1.1 2010/01/27 13:06:21 maeda Exp $ -->
+<html lang="ja-JP">
+<head>
+<link rel="stylesheet" href="/~maeda/class/simple.css" type="text/css">
+<meta http-equiv="Content-type" content="text/html; charset=utf8">
+<title>オブジェクト指向プログラミング実習 課題4</title>
+</head>
+
+
+<body bgcolor = "#fffff0">
+
+<hr />
+<a name="top">
+<h1>オブジェクト指向プログラミング実習 課題4</h1>
+</a>
+
+<h3>この課題をクリアするには</h3>
+<ol>
+<li>チーム全員がこのページの内容を理解していること．
+</li>
+<li>チームを代表して誰かメンバーがプロジェクト課題を提出すること．
+</li>
+<li>(出席している)チーム全員がmanabaの「課題４確認ドリル」を何回か受験すること．
+</li>
+<li>最後に，(出席している)チーム全員で教員のところに来て質疑セッションを行うこと．
+</li>
+</ol>
+
+また，早く課題をクリアするには，さらに
+オプション問題を解く必要があります．
+
+<h2>トピック：Scannerを用いた入力</h2>
+
+
+ <a target="_blank" href="http://docs.oracle.com/javase/jp/7/api/java/util/Scanner.html">java.util.Scanner</a>クラスは，標準入力(通常はキーボード)やファイルから，
+整数や単語や行といった単位を読み込むのに便利なクラスである．
+
+たとえば， <a target="_blank" href="http://docs.oracle.com/javase/jp/7/api/java/util/Scanner.html#nextLine()">nextLine()</a> は行を，
+<a target="_blank" href="http://docs.oracle.com/javase/jp/7/api/java/util/Scanner.html#nextInt()">nextInt()</a> は整数を一つ読み込む．
+
+<h4>例題:</h4>
+
+<pre class="program"><code>
+import java.util.Scanner;
+
+class EchoLine {
+  public static void main(String[] args) {
+    Scanner scanner = new Scanner(System.in);
+    String s = scanner.nextLine();
+    System.out.println("入力された文字列は:" + s);
+  }
+} 
+</code></pre>
+
+上の例題は、キーボードから文字列を1行入力して、String型の変数sに代入している．
+
+<h4>例題:</h4>
+
+<pre class="program"><code>
+import java.util.Scanner;
+
+class EchoInt {
+  public static void main(String[] args) {
+    Scanner scanner = new Scanner(System.in);
+    int i = scanner.nextInt();
+    System.out.println("入力された整数は:" + i);
+  }
+} 
+</code></pre>
+
+上の例題は、キーボードから整数を1つ入力して，int型の変数iに代入している．
+<p>
+<a target="_blank" href="http://docs.oracle.com/javase/jp/7/api/java/io/BufferedReader.html" >BufferedReader</a>の<a target="_blank" href="http://docs.oracle.com/javase/jp/7/api/java/io/BufferedReader.html#readLine%28%29" >readLine()</a>メソッドを使って行を読み取り，
+<a target="_blank" href="http://docs.oracle.com/javase/jp/7/api/java/lang/Integer.html#parseInt%28java.lang.String%29">Integer.parseInt()メソッド</a>を用いて整数に変換するのと比べて，
+かなり簡便である．
+<p>
+また，キーボードやテキストファイルから単語(トークン)をひとつ読み込むには，
+<a target="_blank" href="http://docs.oracle.com/javase/jp/7/api/java/util/Scanner.html#next()">next()</a> メソッドが利用できる．「トークン」の区切りは，
+<a href="http://docs.oracle.com/javase/jp/7/api/java/util/Scanner.html#useDelimiter(java.lang.String)" target="_blank">
+useDelimiterメソッド</a>で変更することができる．
+デフォルトは空白や改行などのホワイトスペース文字が区切りとなっている．
+
+<a name="collection"><h2>トピック：コレクション</h2></a>
+
+一般に，
+「集合」「列」「写像」といった抽象的なデータ（やりたいこと・<b>仕様</b>）と
+「線形リスト」「配列」「ハッシュ表」「木構造」といった具体的なデータ構造
+（どうやって実現するか・<b>実装</b>）を切り離しておいた方が，
+変更に強く，再利用しやすいプログラムを作ることができる．
+<p>
+Javaでは，抽象的なデータを表すためにインターフェースを用いることが多い．
+抽象的なデータの実装(implementation)は，
+インターフェースをimplementしたクラスによって表す．
+<p>
+Javaでは，「集合」「列」「写像」などの
+データの集まり（コレクション）を表すインターフェースとして
+以下のようなものが用意されている．
+<dl compact>
+<dt>
+
+<a href="http://docs.oracle.com/javase/jp/7/api/java/util/Set.html" target="_blank">
+<code>java.util.Set</code><a>
+<dd> 集合(重複のないコレクション)を表すインターフェースで，実装するクラスとしては
+<ul>
+<li>
+<a href="http://docs.oracle.com/javase/jp/7/api/java/util/HashSet.html" target="_blank">
+<code>java.util.HashSet</code><a>(ハッシュ表を使ったSetの実装)
+<li>
+<a href="http://docs.oracle.com/javase/jp/7/api/java/util/TreeSet.html" target="_blank">
+<code>java.util.TreeSet</code><a>(木構造を使ったSetの実装)
+<li>
+<a href="http://docs.oracle.com/javase/jp/7/api/java/util/LinkedHashSet.html" target="_blank">
+<code>java.util.LinkedHashSet</code><a>(ハッシュ表と線形リストを用いたSetの実装)
+
+</ul>
+が用意されている．
+
+<dt>
+<a href="http://docs.oracle.com/javase/jp/7/api/java/util/List.html" target="_blank">
+<code>java.util.List</code><a>
+<dd> 列(ある順序で並んだ，重複を許すコレクション)を表すインターフェースで，実装として
+<ul>
+<li><a href="http://docs.oracle.com/javase/jp/7/api/java/util/ArrayList.html" target="_blank">
+<code>java.util.ArrayList</code></a>(配列を使ったListの実装)
+<li><a href="http://docs.oracle.com/javase/jp/7/api/java/util/LinkedList.html" target="_blank">
+<code>java.util.LinkedList</code></a>(線形リストを使ったListの実装)
+</ul>
+などが用意されている．
+
+
+<dt>
+<a href="http://docs.oracle.com/javase/jp/7/api/java/util/Map.html" target="_blank">
+<code>java.util.Map</code><a>
+<dd> 写像（キーから値への対応づけの集合）を表すインターフェースで，実装としては
+<ul>
+<li><a href="http://docs.oracle.com/javase/jp/7/api/java/util/HashMap.html" target="_blank">
+<code>java.util.HashMap</code></a>(ハッシュ表を使ったMapの実装)
+<li><a href="http://docs.oracle.com/javase/jp/7/api/java/util/TreeMap.html" target="_blank">
+<code>java.util.TreeMap</code></a>(木構造を使ったMapの実装)
+</ul>
+などがある．
+</dl>
+
+また，ListとSetの親インターフェース(スーパーインターフェース)
+として
+<a href="http://docs.oracle.com/javase/jp/7/api/java/util/Collection.html" target="_blank">
+<code>java.util.Collection</code></a>
+がある．
+<hr>
+具体的な使い方を説明する．
+<p>
+例えば「文字列の集合」を表す抽象的なデータ型を持つ変数は，
+<pre class="program"><code>
+  Set&lt;String&gt; setOfString;
+</code></pre>
+のように宣言する．この変数には，たとえば，
+
+<pre class="program"><code>
+  setOfString = new HashSet&lt;String&gt;();
+</code></pre>
+のように，あるいは，
+<pre class="program"><code>
+  setOfString = new TreeSet&lt;String&gt;();
+</code></pre>
+のように，集合を表す具体的なデータ
+(Setインターフェースを実装している任意のクラスのインスタンス)を代入できる．
+<p>
+集合に要素を付け加えるには，
+<pre class="program"><code>
+
+  setOfString.add("hello!");
+</code></pre>
+のように
+<a href="http://docs.oracle.com/javase/jp/7/api/java/util/Set.html#add(E)" target="_blank">addメソッド</a>
+を用いる．
+<p>
+集合に文字列が含まれているかどうかは，
+<a href="http://docs.oracle.com/javase/jp/7/api/java/util/Set.html#contains(java.lang.Object)" target="_blank">
+containsメソッド</a>を使って調べることができる．
+<pre class="program"><code>
+  if (setOfString.contains("word")) {
+    System.out.println("The set contains 'word'");
+  }
+</code></pre>
+また，集合にいくつ要素が含まれているかは，
+
+<a href="http://docs.oracle.com/javase/jp/7/api/java/util/Set.html#size()" target="_blank">
+sizeメソッド</a>を使って調べることができる．
+<pre class="program"><code>
+  System.out.println("The set contains " +  setOfString.size() " strings.");
+</code></pre>
+
+これらの操作は，具体的なデータ型(実装)がHashSet, TreeSet,
+LinkedHashSetのどれであっても，同じように行なうことができる．
+具体的なデータ型によって性能の特性(追加や参照の速度や，
+内部でソートされているかどうかなど)が異なるので，
+プログラムをなるべく変更せずに，用途に応じた実装を使い分けることができる．
+<hr/>
+また，SetはListなどと並んでCollectionの一種(サブインターフェース)
+であるので，集合データはCollection型の変数に代入することができる．
+<pre class="program"><code>
+  Collection&lt;String&gt; col = setOfString;
+
+</code></pre>
+上で説明したadd, contains, sizeの操作は，
+集合に限らず，どんなCollectionに対してでも行なうことができる．
+
+<hr>
+<h4>例題: 文字列のリスト</h4>
+<code><pre class="program">
+import java.util.*;
+
+class ListTest {
+  public static void main(String[] args) {
+    <u>List&lt;String&gt;</u> list = <u>new LinkedList&lt;String&gt;();</u>
+    for (int i = 0;i &lt; args.length; i++) {
+      list.<u>add</u>(args[i]);
+    }
+    System.out.println(list.<u>size()</u> + " words.");
+  }
+}
+</pre></code>
+Javaのmainメソッドの引数の文字列配列(上の例ではargs)は，
+Javaプログラムをシェルから起動した時にコマンドラインから与えた引数が入る．
+<p>
+上のプログラムは，コマンドラインから与えた引数の数を
+数えるプログラムである．<a href="http://docs.oracle.com/javase/jp/7/api/java/util/List.html" target="_blank">Listインターフェース</a>を用いて
+複数の文字列を集め，最後にリストの中の要素の数を出力している．
+Listの実装としては，<a href="http://docs.oracle.com/javase/jp/7/api/java/util/LinkedList.html" target="_blank">LinkedList</a> (線形リスト)を用いている．
+
+<h4>実行例: </h4>
+
+<p>
+(<b>太字</b>が入力)
+<code><pre class="interaction">
+$ <b>java ListTest apple orange</b>
+2 words.
+$ <b>java ListTest apple orange banana orange apple</b>
+5 words.
+$
+</pre></code>
+<hr>
+<h4>例題: 文字列の集合</h4>
+下のクラスSetTestは，
+上のListTestを元にして，
+Listインターフェースの代わりに<a href="http://docs.oracle.com/javase/jp/7/api/java/util/Set.html" target="_blank">Set</a>を，
+LinkedListの代わりに<a href="http://docs.oracle.com/javase/jp/7/api/java/util/HashSet.html" target="_blank">HashSet</a>を使い，
+重複を取り除いた文字列の数を数えるようにした
+ものである．
+
+
+<code><pre class="program">
+import java.util.*;
+
+class SetTest {
+  public static void main(String[] args) {
+    Set&lt;String&gt; set = new HashSet&lt;String&gt;() ;
+    for (int i = 0;i &lt; args.length; i++) {
+      set.add(args[i]);
+    }
+    System.out.println(set.size() + " words.");
+  }
+}
+</pre></code>
+
+<h4>実行例: </h4>
+<p>
+(<b>太字</b>が入力)
+
+<code><pre class="interaction">
+$ <b>java SetTest apple orange</b>
+2 words.
+$ <b>java SetTest apple orange banana orange apple</b>
+3 words.
+$
+</pre></code>
+
+<!-- とっても大事なこと： ListもSetもCollectionの一種(サブインターフェース)． -->
+<hr>
+<h4>例題: 単語数え</h4>
+<code><pre class="program">
+import java.util.*;
+
+class WordCount {
+    public static void main(String[] args) {
+      Scanner input = new Scanner(System.in);
+      int count = 0;
+      while (input.hasNext()) {
+          input.next();  // トークン(単語)をひとつ読む．読んだ結果は使わない．
+          count++;
+      }
+      System.out.println (count + " words.");
+  }
+}
+</pre></code>
+上のプログラムは，標準入力から入力が尽きるまで読み込み，その中にトークン
+がいくつあるか数える．
+<p>
+ここでは，Scannerのnext()を呼ぶたびにトークンを１つずつ返す機能を用いている．
+文字列中にもうトークンが残っていないなら，hasNext()がfalseを返す．
+<p>
+<h4>実行例: </h4>
+<p>
+(<b>太字</b>が入力)
+<code><pre class="interaction">
+$ <b>java WordCount</b>
+<b>A B C</b>
+<b>D E A B</b>
+<b>^D</b> (コントロールD)
+7 words.
+$ <b>java WordCount &lt; ~maeda/const</b>
+297 words.
+$
+</pre></code>
+
+<hr>
+<h3>設問1: 語彙数え</h3>
+
+上のWordCountを参考に，
+重複を取り除いた単語の数を数えるようにした
+クラスWordSetCountを作りなさい．
+
+<h4>実行例: </h4>
+<p>
+(<b>太字</b>が入力)
+
+<code><pre class="interaction">
+$ <b>java WordSetCount</b>
+<b>A B C</b>
+<b>D E A B</b>
+<b>^D</b> (コントロールD)
+5 words.
+$ <b>java WordSetCount &lt; ~maeda/const</b>
+156 words.
+$
+</pre></code>
+
+<u><b>WordSetCount.javaを提出しなさい．</b></u>
+
+<hr>
+<h4>例題: ファイルからの読み込み</h4>
+<code><pre class="interaction">
+import java.io.*;
+import java.util.*;
+
+class FileWordCount {
+    // 指定した名前のファイルから読むScannerを作って返すクラスメソッド
+    static Scanner fileScanner(String fileName) {
+        Scanner value = null;
+        try {
+            value = new Scanner(new File(fileName));
+        } catch (FileNotFoundException e) {
+            System.err.println("ファイル" +  fileName + "は存在しません。");
+            System.exit(1);
+        }
+        return value;
+    }
+    public static void main(String[] args) {
+        Scanner input = fileScanner(args[0]);
+        int count = 0;
+        while (input.hasNext()) {
+            input.next();  // トークン(単語)をひとつ読む．読んだ結果は使わない．
+            count++;
+        }
+        System.out.println (count + " words.");
+    }
+}
+</pre></code>
+上のプログラムは，WordCountを変更して，
+標準入力の代わりにファイルから読み込むようにしたものである．
+Fileは，コンストラクタに与えた文字列が示すファイルを
+表すクラスである．
+存在しないファイルに対してScannerを作ろうとすると
+エラーメッセージを表示して終了する．
+<h4>実行例: </h4>
+<p>
+(<b>太字</b>が入力)
+<code><pre class="interaction">
+$ <b> java FileWordCount SetTest.java </b>
+34 words.
+$ <b>java FileWordCount ~maeda/const</b>
+297 words.
+$ <b>java FileWordCount ~maeda/dict</b>
+<font color="red"><strike>45402</strike>45389</font> words.
+$
+</pre></code>
+
+FileWordCount.fileScannerメソッドは，これ以降の設問で呼び出してもよいこととする．
+
+<hr>
+<h3>設問2: 簡易スペルチェック</h3>
+ファイル名を1つコマンドライン引数として受け取り，
+その<u>ファイル内にあって /home/prof/maeda/dict ファイル内にない単語</u>を
+ミススペルとみなして出力するクラスSpellを作りなさい．
+<ul>
+<li>スキャナに対して useDelimiter("[^a-zA-Z]+")を実行し，
+単語の区切りを「英字以外の文字の並び」とすること(つまり，単語の定義は「英字の並び」となる)．
+</li>
+<li>単語どうしは，StringクラスのStringクラスの<a href="http://docs.oracle.com/javase/jp/7/api/java/lang/String.html#toLowerCase()" target="_blank">toLowerCase</a>メソッドを用いて
+すべて小文字に変換して比較すること．
+</li>
+<li>同じ単語を2回以上出力しないようにすること．
+</li>
+</ul>
+
+<!--
+<h4>実行例: </h4>
+<p>
+(<b>太字</b>が入力)
+<code><pre class="interaction">
+$ <b>java Spell SetTest.java</b>
+util
+wordcount
+args
+int
+hasnext
+println
+$ 
+</pre></code>
+</del>
+-->
+<h4>ヒント： </h4>
+まず集合dictに，ファイル/home/prof/maeda/dict内の単語をすべて(小文字に変換して)加えておく．
+<hr>
+
+<h4>実行例: </h4>
+<p>
+(<b>太字</b>が入力)
+<code><pre class="interaction">
+$ <b>java Spell ~maeda/const</b>
+a
+rescripts
+$ <b>java Spell SetTest.java </b>
+util
+settest
+args
+hashset
+int
+i
+println
+$ 
+</pre></code>
+
+<u><b>Spell.javaを提出しなさい．</b></u>
+
+<hr />
+<a href="#top">Top</a>
+<h2>トピック：ラッパークラス</h2>
+
+Javaのint型やchar型などの基本型(primitive type)の値はオブジェクトではない
+ので，
+<a href="http://docs.oracle.com/javase/jp/7/api/java/util/List.html" target="_blank">
+List<a>や
+<a href="http://docs.oracle.com/javase/jp/7/api/java/util/Set.html" target="_blank">
+Set<a>にそのまま格納することはできない．
+基本型それぞれについて
+<a href="http://docs.oracle.com/javase/jp/7/api/java/lang/Integer.html" target="_blank">
+Integer</a>,
+<a href="http://docs.oracle.com/javase/jp/7/api/java/lang/Character.html" target="_blank">
+Character</a>など対応するクラスが用意されていて，
+これらに変換して格納しなければならない．
+IntegerやCharacterなどは，単に基本型の値を包み込んで
+オブジェクトにするためだけのクラスなのでラッパー(wrapper)クラスと呼ばれている．
+<p>
+基本型とラッパークラスの変換は，ほぼ自動的に行なわれるので，
+あまりプログラマが意識する必要はないが，
+<b>整数の集合は<code>Set&lt;int&gt;</code>
+ではなく<code>Set&lt;Integer&gt;</code>
+のように，ラッパークラスの名前を書く必要がある．</b>
+
+<table border>
+<caption>ラッパークラス一覧</caption>
+<tr>
+<th>基本型</th><th>ラッパークラス名</th>
+</tr>
+<tr><td>boolean</td><td>Boolean</td></tr>
+<tr><td>byte</td><td>Byte</td></tr>
+<tr><td>short</td><td>Short</td></tr>
+<tr><td>int</td><td>Integer</td></tr>
+<tr><td>long</td><td>Long</td></tr>
+<tr><td>float</td><td>Float</td></tr>
+<tr><td>double</td><td>Double</td></tr>
+<tr><td>char</td><td>Character</td></tr>
+</table>
+
+
+<p>
+<h4>例題4: 整数の集合</h4>
+<code><pre class="program">
+import java.util.*;
+
+class Primes {
+  public static void main(String[] args) {
+    // 素数でないことがわかっている整数の集合
+    Set&lt;Integer&gt; nonprime = new HashSet&lt;Integer&gt;(); 
+
+    for (int i = 2; i &lt; 100; i++) {
+      if (! nonprime.contains(i)) {
+        // 新しい素数が見つかった
+        System.out.println(i);
+        // iの倍数を集合に入れる
+        for (int j = i + i; j &lt; 100; j += i) {
+          nonprime.add(j);
+        }
+      }
+    }
+  }
+}
+</pre></code>
+上のプログラムは，100未満の素数を画面に出力する．
+<h4>実行例: </h4>
+<p>
+(<b>太字</b>が入力)
+<code><pre class="interaction">
+$ <b>java Primes</b>
+2
+3
+...
+97
+$
+</pre></code>
+<hr>
+<h2>トピック: Iteratorと拡張for文</h2>
+
+コレクションの内容を順にすべて取り出したい時，
+すなわちコレクションの中身について繰返し(iteration)を行ないたい時のために，
+<a href="http://docs.oracle.com/javase/jp/7/api/java/util/Iterator.html" target="_blank">Iterator</a>というインターフェースが用意されている．
+<p>
+Iteratorを用いて繰返しを行なうには，
+オブジェクトがまだ残っているかどうかを調べるメソッド
+<a href="http://docs.oracle.com/javase/jp/7/api/java/util/Iterator.html#hasNext()" target="_blank">hasNext()</a>と
+次のオブジェクトを返すメソッド
+<a href="http://docs.oracle.com/javase/jp/7/api/java/util/Iterator.html#next()" target="_blank">next()</a>を用いて以下のようにする．
+<code><pre class="program">
+  Iterator<E> i = ...;
+  while (i.hasNext()) {
+    E x = i.next();
+    ...
+  }
+</pre></code>
+これは<a href="https://moodle.tsukuba.ac.jp/mod/resource/view.php?id=24956#scanner" target="_blank">Scanner</a>の使い方と同じであるが，
+実際ScannerもIteratorの一種(Iteratorインターフェースを実装したクラス)
+になっている．
+<p>
+SetやListからIteratorを取り出すには，
+<a href="http://docs.oracle.com/javase/jp/7/api/java/util/Set.html#iterator()" target="_blank">iterator()</a>メソッドを用いる．
+
+たとえば，Set&lt;String&gt;の全要素について繰り返しを行なうには，
+<code><pre class="program">
+  Set&lt;String&gt; set = ...;
+  Iterator&lt;String&gt; i = set.iterator();
+  while (i.hasNext()) {
+    String s = i.next();
+    ...
+  }
+</pre></code>
+のようにすればよい．
+<p>
+<h3>コレクションに対する，より簡便な繰り返し</h3>
+
+しかし実は，SetやListのように，iterator()メソッドでIteratorを取り出せるもの
+(<a href="http://docs.oracle.com/javase/jp/7/api/java/lang/Iterable.html" target="_blank">Iterableインターフェース</a>を実装しているもの)
+については，より簡単な構文を使うことができて，上と同じ繰り返しを，
+<code><pre class="program">
+  Set&lt;String&gt; set = ...;
+  for (String s: set) {
+    ...
+  }
+</pre></code>
+と書くことができる．
+
+<code><pre class="program">
+import java.util.*;
+
+class Primes2 {
+    public static void main(String[] args) {
+        Set&lt;Integer&gt; primes = new HashSet&lt;Integer&gt;(); // 素数の集合
+        outer: for (int i = 2; i &lt; 100; i++) {
+            for (int p : primes) {
+                if (i % p == 0) {
+                    // 割り切れた．iは素数でない．
+                    continue outer;
+                }
+            }
+            // 新しい素数が見つかった
+            System.out.println(i);
+            // iを集合に入れる
+            primes.add(i);
+        }
+    }
+}
+</pre></code>
+<h4>実行例: </h4>
+<p>
+(<b>太字</b>が入力)
+<code><pre class="interaction">
+$ <b>java Primes2</b>
+2
+3
+...
+97
+$
+</pre></code>
+
+<hr>
+<h2>トピック：Map</h2>
+「写像」あるいは「対応づけ」を表すコレクションである
+<a href="http://docs.oracle.com/javase/jp/7/api/java/util/Map.html" target="_blank">
+<code>java.util.Map</code><a>の使い方を練習しよう．
+<p>
+たとえば，「文字列から整数へのMap」は
+<code><pre class="program">
+  Map&lt;String, Integer&gt; map;
+</pre></code>
+のように宣言する．具体的なデータ，たとえばHashMapクラスのインスタンスを
+つくって代入するには，
+<code><pre class="program">
+  map = new HashMap&lt;String, Integer&gt;();
+</pre></code>
+のようにする．
+<p>
+Mapに<a href="http://docs.oracle.com/javase/jp/7/api/java/util/Map.html#put(K,%20V)" target="_blank">putメソッド</a>でキーと値の対応を書き込んでおき，
+後で<a href="http://docs.oracle.com/javase/jp/7/api/java/util/Map.html#get(java.lang.Object)" target="_blank">getメソッド</a>でキーに対応する値を取り出すことができる．
+また，<a href="http://docs.oracle.com/javase/jp/7/api/java/util/Map.html#containsKey(java.lang.Object)" target="_blank">containsKeyメソッド</a>で，キーが含まれているかどうか調べることができる．
+<a href="http://docs.oracle.com/javase/jp/7/api/java/util/Map.html#keySet()" target="_blank">keySetメソッド</a>は，キーの集合を取り出す．
+
+
+<h4>例題: キーワードと数値の対応</h4>
+下のプログラムは，--from で与えた整数から --to で与えた整数まで，
+--step で与えた間隔で増やしながら出力する．
+--from, --to, --stepはどの順序で与えても良く，また省略しても良い．
+--from, --to, --stepを省略したときの値はそれぞれ1, 10, 1である．
+<code><pre class="program">
+import java.util.*;
+
+class FromTo {
+    private static void setToMap(Map&lt;String,Integer&gt; map, String[] args) {
+        for (int i = 0;i &lt; args.length; i += 2) {
+            map.put(args[i], Integer.parseInt(args[i + 1]));
+        }
+    }
+    public static void main(String[] args) {
+        Map&lt;String, Integer&gt; map = new HashMap&lt;String, Integer&gt;();
+        String[] defaultValues = {"--from", "1", "--to", "10", "--step", "1"};
+        // 初期値を与えておく
+        setToMap(map, defaultValues);
+
+        // コマンドライン引数でmapを更新
+        setToMap(map, args);
+
+        // 値を取り出す
+        int from = map.get("--from");
+        int to = map.get("--to");
+        int step = map.get("--step");
+        for (int i = from; i &lt;= to; i += step) {
+           System.out.println(i);
+        }
+    }
+}
+
+</pre></code>
+
+<!-- 上で，Integer.parseInt(s)は，数字からなる文字列sを整数に変換するメソッドである． -->
+
+<h4>実行例: </h4>
+<p>
+(<b>太字</b>が入力)
+<code><pre class="interaction">
+$ <b>java FromTo</b>
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+$ <b>java FromTo --from 3 --step 2</b>
+3
+5
+7
+9
+$ <b>java FromTo --step 3 --to 7</b>
+1
+4
+7
+$
+</pre></code>
+
+<h3>設問3: Fibonacci数のメモ化</h3>
+
+Fibonacci数は，負でない整数nに対して，<br>
+<img src="fib.jpg" alt="fib def" />
+<br>
+と帰納的(再帰的)に定義される数列である．以下は，
+Fibonacci数を上の定義どおりに(ただし，モジュロ演算を使って下5桁のみを)
+計算し，結果と計算時間を表示する
+プログラムである．
+<code><pre class="program">
+public class Fib {
+    static int fib(int n) {
+        if (n &lt; 2) {
+            return 1;
+        } else {
+            return (fib(n - 1) + fib(n - 2)) % 100000;
+        }
+    }
+    public static void main(String[] args) {
+        long start = System.nanoTime();
+        int n = Integer.parseInt(args[0]);
+        System.out.println("fib(" + n + ") = " + fib(n));
+        System.out.println((System.nanoTime() - start) / 1000000 + "ms");
+    }
+}
+</pre></code>
+<h4>実行例: </h4>
+<p>
+(<b>太字</b>が入力)
+<code><pre class="interaction">
+$ <b>time java Fib 10</b>
+fib(10) = 89
+0ms
+$ <b>time java Fib 44</b>
+fib(44) = 3170
+2636ms
+$
+</pre></code>
+上のプログラムは，同じ引数に対する値(例えばfib(3))を何度も計算するので効率が悪い．
+実行時間を測ると，
+引数が大きくなるにつれて指数関数的に時間がかかってしまう．
+これを改善するために，<u>一度計算した(2以上の)引数に対する値をMapに覚えておき，
+もし引数がMapにすでにあれば計算せずにその値を返す</u>ようにしなさい．
+<p>
+このような考え方で
+効率を改善したクラスFib2(やはり，下5桁のみ計算するもの)を作りなさい．
+<h3>実行例: </h3>
+<p>
+(<b>太字</b>が入力)
+<code><pre class="interaction">
+$ <b>time java Fib2 10</b>
+fib(10) = 89
+0ms
+$ <b>time java Fib2 44</b>
+fib(44) = 3170
+0ms
+$ <b>time java Fib2 4400</b>
+fib(4400) = 41026
+5ms
+</pre></code>
+<u><b>Fib2.javaを提出しなさい．</b></u>
+
+<p>
+参考: このように，結果を記憶しておいて効率を改善するテクニックを
+メモ化(memoization)と呼ぶ．
+<hr>
+<h3>早くクリアするためのオプション問題: 対数オーダーのFibonacci数</h3>
+1/19(木)までにこの課題をクリアするには，この問題を解くこと．
+<p>
+n番目のFibonacci数の下5桁を、
+整数のみを用いて、時間計算量がO(log n)のオーダーで
+計算するクラスFibLogを作りなさい。FIbLog.javaを提出しなさい。
+<p>
+ヒント: 行列のn乗演算はO(log n)で計算できる．
+
+<hr>
+
+<h3>設問4: 単語の頻度数え</h3>
+
+ファイルに含まれる単語の出現頻度を調べる
+クラスFreqを作りなさい．
+<ul>
+<li>単語は，「英文字の並び」とする(つまり，「英文字以外」で区切られた文字列とする)．
+</li>
+<li>すべて小文字に変換して処理すること．
+</li>
+</ul>
+
+<h4>実行例: </h4>
+<p>
+(<b>太字</b>が入力)
+<code><pre class="interaction">
+$ <b>java Freq ~maeda/const</b>
+2:a
+1:accomplish
+1:acting
+1:action
+1:again
+7:all
+1:alone
+2:an
+18:and
+...(略)...
+2:time
+6:to
+1:trust
+1:trusting
+1:tyranny
+2:universal
+2:upon
+1:visited
+1:want
+1:war
+10:we
+4:which
+1:who
+5:with
+2:world
+1:would
+$
+</pre></code>
+<u><b>Freq.javaを提出しなさい．</b></u>
+<p>
+ヒント： TreeMap<String,Integer>を使って，単語ごとの出現頻度を記録する．
+(TreeMapを使うと，キー集合は自動的に昇順にソートされる．)
+
+<hr />
+<a href="#top">Top</a>
+<h3>早くクリアするためのオプション問題: 循環小数</h3>
+1/25(水)までに課題をクリアするには，この問題も解くこと．
+<p>
+2つの数m, nを入力すると，m/nの値を出力するプログラム(クラス名はFraction)を作りなさい．
+<ul>
+<li>m/nが整数になる場合は，単にその整数を出力する．
+</li>
+<li>m/nが有限桁の小数で表わされる場合には，その小数のすべての桁を正確に出力する．
+</li>
+<li>m/nが循環小数で表わされる場合には，循環し終える部分までを出力し，次の行で循環する範囲を^で示す．
+</li>
+</ul>
+<font color="red">たとえ「整数部も含めて循環している」とみなせる場合であっても，循環を示す印は，<u>小数点以下の範囲のみ</u>につけることにする(以下の100/7の例参照)．</font>
+  <p>
+Fraction.javaを提出しなさい．
+<p>
+ヒント: 筆算の手順で割り算を進めていき，同じ余りの値がまた出てきたら循環したことがわかる．
+<h4>実行例: </h4>
+<p>
+(<b>太字</b>が入力)
+<code><pre class="interaction">
+$ <b>java Fraction 100 4</b>
+100/4 = 25
+$ <b>java Fraction 10 4</b>
+10/4 = 2.5
+$ <b>java Fraction 100 3</b>
+100/3 = 33.3
+           ^
+$ <b>java Fraction 100 7</b>
+100/7 = 14.285714
+           ^^^^^^
+$ <b>java Fraction 1 7</b>
+1/7 = 0.142857
+        ^^^^^^
+$ <b>java Fraction 1 170</b>
+1/170 = 0.00588235294117647
+           ^^^^^^^^^^^^^^^^
+$ <b>java Fraction 1 379721</b>
+(略)
+</pre></code>
+
+<hr />
+<a href="#top">Top</a>
+
+<hr />
+
+</body>
+</html>

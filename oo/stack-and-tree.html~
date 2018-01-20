@@ -1,0 +1,777 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML i18n//EN">
+<!-- $Id: q8.shtml,v 1.1 2010/01/27 13:06:21 maeda Exp $ -->
+<html lang="ja-JP">
+<head>
+<link rel="stylesheet" href="/~maeda/class/simple.css" type="text/css">
+<meta http-equiv="Content-type" content="text/html; charset=utf8">
+<title>オブジェクト指向プログラミング実習 課題5</title>
+</head>
+
+
+<body bgcolor = "#fffff0">
+
+<hr />
+<a name="top">
+<h1>オブジェクト指向プログラミング実習 課題5</h1>
+</a>
+<h3>この課題をクリアするには</h3>
+<ol>
+<li>チーム全員がこのページの内容を理解していること．
+</li>
+<li>チームを代表して誰かメンバーがプロジェクト課題を提出すること．
+</li>
+<li>(出席している)チーム全員がmanabaの「課題５確認ドリル」を何回か受験すること．
+</li>
+<li>最後に，(出席している)チーム全員で教員のところに来て質疑セッションを行うこと．
+</li>
+</ol>
+
+また，早く課題をクリアするには，さらに
+オプション問題を解く必要があります．
+
+<h2>トピック：スタック操作，対話型プログラム</h2>
+
+<h4>例題: スタック式電卓</h4>
+
+次のプログラムは，簡単な電卓プログラムである．
+
+<pre class="program"><code>
+import java.util.*;
+
+public class Calc {
+    public static void main(String[] args) {
+        Deque&lt;Integer&gt; stack = new LinkedList&lt;Integer&gt;();
+        Scanner scanner = new Scanner(System.in);
+        while (scanner.hasNext()) {
+            if (scanner.hasNextInt()) {
+                int v = scanner.nextInt();
+                stack.push(v);
+            } else {
+                String token = scanner.next();
+                if (token.equals("+")) {
+                    int v2 = stack.pop();
+                    int v1 = stack.pop();
+                    stack.push(v1 + v2);
+                } else if (token.equals("-")) {
+                    int v2 = stack.pop();
+                    int v1 = stack.pop();
+                    stack.push(v1 - v2);
+                } else if (token.equals("*")) {
+                    int v2 = stack.pop();
+                    int v1 = stack.pop();
+                    stack.push(v1 * v2);
+                } else if (token.equals("/")) {
+                    int v2 = stack.pop();
+                    int v1 = stack.pop();
+                    stack.push(v1 / v2);
+                } else if (token.equals("=")) {
+                    for (int p : stack) {
+                        System.out.println(p);
+                    }
+                } else {
+                    System.out.println("エラー: 誤ったトークン: " + token);
+                }
+            }
+        }
+    }
+}
+</code></pre>
+整数を入力すると，スタックにプッシュする．
+「=」 を入力すると，いまスタックに積まれている値を，最後にプッシュした値から順に出力する．
+「+」, 「-」, 「*」, 「/」を入力すると，スタックトップの２つの値をポップし，演算を行って，結果をスタックにプッシュする．
+入力が尽きると(Macの場合，行頭でControl-Dを入力すると)終了する．
+<p>
+上では，<a href="collection.html#scanner" target="_blank">Scanner</a>オブジェクトの
+<a target="_blank" href="http://docs.oracle.com/javase/jp/7/api/java/util/Scanner.html#hasNextInt()">hasNextInt()</a>
+メソッドを用いて，次に読み込むトークンが整数かどうかを判別している．
+また，
+<a target="_blank"
+   href="http://docs.oracle.com/javase/jp/7/api/java/util/Deque.html">Deque</a>
+インターフェースは，スタックとキューの両方の操作を定義したインターフェー
+スで，これを実装したクラスとして<a target="_blank" href="http://docs.oracle.com/javase/jp/7/api/java/util/LinkedList.html">LinkedList</a>がある．
+
+<h4>実行例: </h4>
+
+<p>
+(<u>下線</u>が入力, <font color="green">緑字</font>は注釈．)
+<code><pre class="interaction">
+$ <u>java Calc</u>
+<u>3 5 7 1</u>     <font color="green">← 4つの数をプッシュ</font>
+<u>=</u>           <font color="green">← スタックの内容を表示</font>
+1
+7
+5
+3
+^D            <font color="green">← 行の先頭でControl-Dを入力</font>
+$
+$ <u>java Calc</u>
+<u>3 1 - =</u>    <font color="green">← 3から1を引いたものを表示</font>
+2
+<u>5 * =</u>      <font color="green">← その結果に5をかけて表示</font>
+10
+<u>2 / =</u>      <font color="green">← 2で割って表示</font>
+5
+</pre></code>
+
+<hr>
+<h4>例題： オブジェクト指向風味に書き換えたスタック電卓</h4>
+
+上記のプログラムを書き換えて，拡張を容易にするために，演算をオブジェクトで表現し
+たのが下記のプログラムである．
+<pre class="program"><code>
+import java.util.*;
+
+public class OOCalc {
+    // OOCalcのインナークラス
+    abstract class Op {
+        abstract public String opName();
+        abstract public void exec(Deque&lt;Integer&gt; stack);
+    }
+    class PrintOp extends Op {
+        public String opName() { return "="; }
+        public void exec(Deque&lt;Integer&gt; stack) {
+            for (int p : stack) {
+                System.out.println(p);
+            }
+        }
+    }
+    abstract class BinOp extends Op {
+        abstract public int op(int rand1, int rand2);
+        public void exec(Deque&lt;Integer&gt; stack) {
+            int v2 = stack.pop();
+            int v1 = stack.pop();
+            stack.push(op(v1, v2));
+        }
+    }
+    class AddOp extends BinOp {
+        public String opName() { return "+"; }
+        public int op(int rand1, int rand2) { return rand1 + rand2; }
+    }
+    class SubOp extends BinOp {
+        public String opName() { return "-"; }
+        public int op(int rand1, int rand2) { return rand1 - rand2; }
+    }
+    class MulOp extends BinOp {
+        public String opName() { return "*"; }
+        public int op(int rand1, int rand2) { return rand1 * rand2; }
+    }
+    class DivOp extends BinOp {
+        public String opName() { return "/"; }
+        public int op(int rand1, int rand2) { return rand1 / rand2; }
+    }
+    class NoOp extends Op {
+        public String opName() { return "noop"; }
+        public void exec(Deque&lt;Integer&gt; stack) {
+            // 何もしない
+        }
+    }
+    // 命令一覧表
+    Op[] optable = {new AddOp(), new SubOp(), new MulOp(), new DivOp(), 
+                    new NoOp(), new PrintOp()};
+    Deque&lt;Integer&gt; stack;
+    Scanner scanner;
+    Map&lt;String, Op&gt; ops;  // 単語辞書
+    OOCalc() {
+        stack = new LinkedList&lt;Integer&gt;();
+        scanner = new Scanner(System.in);
+        ops = new HashMap&lt;String, Op&gt;();
+        // 辞書に命令語を登録する．
+        for (Op op : optable) {
+            ops.put(op.opName(), op);
+        }
+    }
+    public void run() {
+        while (scanner.hasNext()) {
+            if (scanner.hasNextInt()) {
+                stack.push(scanner.nextInt());
+            } else {
+                String token = scanner.next();
+                if (ops.containsKey(token)) {
+                    try {
+                        ops.get(token).exec(stack); // 辞書を引いて命令を解釈する．
+                    } catch (Exception e) {
+                        System.out.println("エラー: " + e);  // 実行時エラー
+                    }
+                } else {
+                    System.out.println("エラー: 誤ったトークン: " + token);
+                }
+            }
+        }
+    }
+    public static void main(String[] args) {
+        new OOCalc().run();
+    }
+}
+</code></pre>
+
+このプログラムでは，「+」や「-」などの演算子の名前や，演算処理をメインループの中に
+直接書くのを避けて，ops という辞書(Map)に演算子の名前と，
+その演算子を処理するオブジェクトを登録している．
+Calcにあった，演算子を識別するための長いif文がなくなって，オーバーライドされた
+opメソッドの呼び出しに置き換えられていることに注目してほしい．
+<p />
+クラスOOCalcの中で定義しているOp, PrintOp, ...などのクラスは
+<b><u>インナークラス</u></b>と言い，OOCalcの外から参照するには
+それぞれOOCalc.Op, OOCalc.PrintOp, ... といったクラス名を使う．
+関連するクラスをまとめてかける他，
+OOCalcの外で定義したクラスと名前がぶつかるおそれがないという利点がある．
+<p />
+新しい演算子命令を追加するには，Opを継承した新しいクラスを作り，
+そのインスタンスをoptableに登録しておけばよい．コンストラクタでは，optable内の
+すべてのオブジェクトを，辞書opsに登録している．
+
+<h4>実行例: </h4>
+
+<p />
+(<u>下線</u>が入力, <font color="green">緑字</font>は注釈．)
+<code><pre class="interaction">
+$ <u>java OOCalc</u>
+<u>3 1 - =</u>
+2
+<u>6 * =</u>
+12
+<u>3 / =</u>
+4
+<u>2 / =</u>
+2
+<u>+</u>
+エラー: java.util.NoSuchElementException <font color="green">← スタック内の数値の数が足りないのでエラー</font>
+<u>1 0 / </u>
+エラー: java.lang.ArithmeticException: / by　zero  <font color="green">← ゼロ除算</font>
+^D            <font color="green">← 行の先頭でControl-Dを入力</font>
+$  
+</pre></code>
+<hr />
+<h3>設問1: 日本語風電卓</h3>
+OOCalcを元に，以下の拡張を加えた電卓JCalcを作りなさい．
+<ul>
+  <li>OOCalcの命令が同じように使えること．
+  </li>
+ <li>
+「+」, 「-」, 「*」, 「/」 について，それぞれ「足す」「引く」「かける」「割る」
+という別名(実際に処理するオブジェクトは同じ)が使えるようにすること．
+また，何も処理をしない命令「noop」(クラス名はNoOp)を作り，その別名として
+「から」「と」「を」「で」という単語を割り当てて，
+これらの単語を無視するようにすること．
+<p />
+別名の登録のために，以下の表を利用するとよい．
+<code class="program"><pre>
+    String[][] alias = {{"足す", "+"}, {"引く", "-"}, {"かける", "*"}, {"割る", "/"},
+                        {"から", "noop"}, {"と", "noop"}, {"を", "noop"}, {"で", "noop"}};
+
+</code></pre>
+</ul>
+
+<h4>プログラムのおおまかな形</h4>
+
+<code><pre class="program">
+import java.util.*;
+
+public class JCalc extends OOCalc {
+    String[][] alias = {{"足す", "+"}, {"引く", "-"}, {"かける", "*"}, {"割る", "/"},
+                        {"から", "noop"}, {"と", "noop"}, {"を", "noop"}, {"で", "noop"}};
+    JCalc() {
+       for (String[] pair : alias) {
+          ops.<font color="red"><strike>add</strike> put</font>(..., ...);
+       }
+    }
+    public static void main(String[] args) {
+        new JCalc().run();
+    }
+}
+</pre></code>
+上記の「...」の部分を埋めてJCalcを完成させなさい．他の部分を変えてはいけない．
+
+<h4>実行例: </h4>
+
+(<u>下線</u>が入力, <font color="green">緑字</font>は注釈．)
+<code><pre class="interaction">
+$ <u>java JCalc</u>
+<u>3 から 1 を 引く =</u> <font color="green">← 「3 1 - =」と同じ．「から」「を」は無視する．</font>
+2
+<u>6 を かける =</u>
+12
+<u>3 で 割る =</u>
+4
+</pre></code>
+
+<u><b>JCalc.javaを提出しなさい．</b></u>
+
+<hr />
+<h2>トピック： Generics</h2>
+
+コレクションで出てきた
+<code>List&lt;String&gt; </code> (文字列のリスト)や
+<code>Map&lt;Integer, Integer&gt;</code> (整数から整数へのマップ)
+のように，他の型をパラメータとして含むJavaの型を<b>ジェネリックな型</b>という．
+(これに関連するJavaの機能を総称してGenericsと呼んでいる．)
+<p>
+たとえば，任意の型<code>E</code>のオブジェクトのペアを表すクラスは，以下のように書ける．
+<code><pre class="program">
+public class Pair&lt;E&gt; {
+    E a, b;
+    Pair(E a, E b) {
+        this.a = a;
+        this.b = b;
+    }
+    public E getFirst() { return a; }
+    public E getSecond() { return b; }
+
+    public static void main(String[] args) {
+        // テストプログラム
+
+        Pair&lt;Integer&gt; i = new Pair&lt;Integer&gt;(1, 2);
+        System.out.println(i.getFirst());
+
+        Pair&lt;String&gt; s = new Pair&lt;String&gt;("foo", "bar");
+        System.out.println(s.getSecond());
+    }
+}
+</pre></code>
+<h4>実行例: </h4>
+
+<p>
+(<u>下線</u>が入力, <font color="green">緑字</font>は注釈．)
+<code><pre class="interaction">
+$ <b>java Pair</b>
+1
+bar
+$ 
+</pre></code>
+また， <a target="_blank" href="http://docs.oracle.com/javase/jp/7/api/java/lang/Number.html">Number</a>
+のサブクラスだけを型パラメータとして受け取れるPointクラスは，以下のように定義できる．
+
+<code><pre class="program">
+public class Point&lt;E extends Number&gt; {  // Eは型変数．Numberのサブクラスに限定
+    private E x, y;
+    Point(E x, E y) {
+        this.x = x;
+        this.y = y;
+    }
+    public E getX() { return x; }
+    public E getY() { return y; }
+    public String toString() { return "(" + x.toString() + ", " + y.toString() + ")"; }
+
+    public static void main(String[] args) {
+        // テストプログラム
+
+        Point&lt;Integer&gt; p1 = new Point&lt;Integer&gt;(1, 2);
+        System.out.println(p1);
+
+        Point&lt;Double&gt; p2 = new Point&lt;Double&gt;(3.5, 4.1);
+        System.out.println(p2);
+
+        // Point&lt;String&gt; p3 = new Point&lt;String&gt;("foo", "bar"); // エラー
+    }
+}
+</pre></code>
+<h4>実行例: </h4>
+
+<p>
+(<u>下線</u>が入力, <font color="green">緑字</font>は注釈．)
+<code><pre class="interaction">
+$ <b>java Point</b>
+(1, 2)
+(3.5, 4.1)
+$ 
+</pre></code>
+
+<hr />
+<h4>例題： Genericsを使った電卓</h4>
+Genericsを用いてOOCalcを書き換えると以下のようになる．
+<code><pre class="program">
+// ファイル Numeric.java
+
+public interface Numeric&lt;E extends Numeric&gt; {
+    public E add(E num);
+    public E subtract(E num);
+    public E multiply(E num);
+    public E divide(E num);
+    public String toString();
+}
+
+// ファイル OOGCalc.java
+
+import java.util.*;
+
+public abstract class OOGCalc&lt;E extends Numeric&lt;E&gt;&gt; {
+    // OOGCalcのインナークラス
+    abstract class Op {
+        abstract public String opName();
+        abstract public void exec(Deque&lt;E&gt; stack);
+    }
+    class PrintOp extends Op {
+        public String opName() { return "="; }
+        public void exec(Deque&lt;E&gt; stack) {
+            for (E p : stack) {
+                System.out.println(p);
+            }
+        }
+    }
+    abstract class BinOp extends Op {
+        abstract public E op(E rand1, E rand2);
+        public void exec(Deque&lt;E&gt; stack) {
+            E v2 = stack.pop();
+            E v1 = stack.pop();
+            stack.push(op(v1, v2));
+        }
+    }
+    class AddOp extends BinOp {
+        public String opName() { return "+"; }
+        public E op(E rand1, E rand2) { return rand1.add(rand2); }
+    }
+    final AddOp ADD_OP = new AddOp();
+    class SubOp extends BinOp {
+        public String opName() { return "-"; }
+        public E op(E rand1, E rand2) { return rand1.subtract(rand2); }
+    }
+    final SubOp SUB_OP = new SubOp();
+    class MulOp extends BinOp {
+        public String opName() { return "*"; }
+        public E op(E rand1, E rand2) { return rand1.multiply(rand2); }
+    }
+    final MulOp MUL_OP = new MulOp();
+    class DivOp extends BinOp {
+        public String opName() { return "/"; }
+        public E op(E rand1, E rand2) { return rand1.divide(rand2); }
+    }
+    final DivOp DIV_OP = new DivOp();
+    // 命令一覧表
+    Deque&lt;E&gt; stack;
+    Scanner scanner;
+    Map&lt;String, Op&gt; ops;  // 単語辞書
+    OOGCalc() {
+        stack = new LinkedList&lt;E&gt;();
+        scanner = new Scanner(System.in);
+        ops = new HashMap&lt;String, Op&gt;();
+        // 辞書に命令語を登録する．
+        ops.put("+", ADD_OP);
+        ops.put("-", SUB_OP);
+        ops.put("*", MUL_OP);
+        ops.put("/", DIV_OP);
+        ops.put("=", new PrintOp());
+    }
+    protected abstract E fromInt(int v);
+    public void run() {
+        while (scanner.hasNext()) {
+            if (scanner.hasNextInt()) {
+                stack.push(fromInt(scanner.nextInt()));
+            } else {
+                String token = scanner.next();
+                if (ops.containsKey(token)) {
+                    try {
+                        ops.get(token).exec(stack); // 辞書を引いて命令を解釈する．
+                    } catch (Exception e) {
+                        System.out.println("エラー: " + e);
+                    }
+                } else {
+                    System.out.println("エラー: 誤ったトークン: " + token);
+                }
+            }
+        }
+    }
+}
+
+// ファイル IntCalc.java
+
+public class IntCalc extends OOGCalc&lt;IntCalc.Int&gt; {
+    // IntCalcのインナークラス IntCalc.Int
+    class Int implements Numeric&lt;Int&gt; {
+        int value;
+        Int(int value) { this.value = value; }
+        public Int add(Int v) { return new Int(value + v.value); }
+        public Int subtract(Int v) { return new Int(value - v.value); }
+        public Int multiply(Int v) { return new Int(value * v.value); }
+        public Int divide(Int v) { return new Int(value / v.value); }
+        public String toString() { return Integer.toString(value); }
+    }
+    protected Int fromInt(int v) {
+        return new Int(v);
+    }
+    public static void main(String[] args) {
+        new IntCalc().run();
+    }
+}
+</pre></code>
+
+<hr />
+<h3>設問2: 有理数電卓</h3>
+
+IntCalcを参考に，
+以前に作った<a href="oo_basics.html#ratio">Ratio</a>を用いて，
+整数でなく有理数の計算を行う電卓RatioCalcを作りなさい．
+<ul>
+  <li>JCalcの命令が同じように使えること．
+  </li>
+  <li>入力できる数値は整数のみでよい(分数の読み込みはできなくてよい)．
+  </li>
+  <li><a href="oo_basics.html">課題1</a>で作ったRatioクラスはそのままあるものとして利用してよい．
+  </li>
+</ul>
+
+<h4>実行例: </h4>
+
+(<u>下線</u>が入力, <font color="green">緑字</font>は注釈．)
+<code><pre class="interaction">
+$ <u>java RatioCalc</u>
+<u>3 から 1 を 引く=</u>
+2
+<u>6 を かける =</u>
+12
+<u>3 で 割る =</u>
+4
+<u>3 / =</u>
+4/3              <font color="green">← 分数を答えとして出力する</font>
+<u>6 * =</u>
+8                <font color="green">← 分母が1なので整数の形で出力する</font>
+</pre></code>
+
+<u><b>RatioCalc.javaを提出しなさい．</b></u>
+<p>
+
+ヒント: Intと似て，
+Ratioのインスタンスを1つ持ち，Numeric&lt;...&gt;を実装する，形だけの
+(Ratioのadd, subtract, ...等を呼びだすだけのadd, subtract, ...等を定義した)クラス
+(たとえばRat implements Numeric&lt;Rat&gt;とか)を作る．
+<p>
+ヒント: JCalcの命令を使えるようにするのは，それほどエレガントにできないと思われる．
+OOGCalcとJCalcの両方を継承するわけにはいかないからである．(JCalcを，最初から
+再利用しやすい形に作っておけば可能だが)．JCalcで別名を定義したコードが
+重複してもかまわない．
+<p>
+<h4>プログラムのおおまかな形(例)</h4>
+<code><pre class="program">
+import java.util.Deque;   // ←忘れがちなので注意．
+
+public class RatioCalc extends OOGCalc&lt;RatioCalc.Rat&gt; {
+    // 後のTreeCalcのために，static なインナークラスにしておくと，
+    // RatioCalcのインスタンスを作らなくてもRatのインスタンスを作れる．
+    // (名前がぶつからないこと以外は，RatioCalcの外にRatクラスを定義するのとほぼ同じ．)
+    static class Rat implements Numeric&lt;Rat&gt; {
+        Ratio ratio;
+        Rat(int i) { ratio = new Ratio(i, 1); }
+        Rat(Ratio r) { ratio = r; }
+        public Rat add(Rat r) { return new Rat(ratio.add(r.ratio)); }
+	...
+    }
+    protected Rat fromInt(int v) {
+        ...
+    }
+    class NoOp extends Op {
+        ...
+    }
+    String[][] alias = {{"足す", "+"}, {"引く", "-"}, {"かける", "*"}, {"割る", "/"},
+                        {"から", "noop"}, {"と", "noop"}, {"を", "noop"}, {"で", "noop"}};
+    RatioCalc() {
+        ...
+    }
+    public static void main(String[] args) {
+        new RatioCalc().run();
+    }
+}
+</pre></code>
+
+<hr />
+<h3>設問3: 式ツリー</h3>
+
+次のプログラムは，入力した式の値を計算するのではなく，式の形を
+記憶して，「=」命令で出力するプログラムである．
+
+<code><pre class="program">
+public class ExprCalc extends OOGCalc&lt;ExprCalc.Tree&gt; {
+    abstract class Tree implements Numeric&lt;Tree&gt; {
+        abstract public String toString();
+        public Tree add(Tree t) { return new Node("+", this, t); }
+        public Tree subtract(Tree t) { return new Node("-", this, t); }
+        public Tree multiply(Tree t) { return new Node("*", this, t); }
+        public Tree divide(Tree t) { return new Node("/", this, t); }
+    }
+    class Leaf extends Tree {
+        int value;
+        Leaf(int value) { this.value = value; }
+        public String toString() { return Integer.toString(value); }
+    }
+    class Node extends Tree {
+        ...
+    }
+   ...
+}
+</pre></code>
+<h4>実行例: </h4>
+
+(<u>下線</u>が入力, <font color="green">緑字</font>は注釈．)
+<code><pre class="interaction">
+$ <u>java ExprCalc</u>
+<u>1 2 + =</u>
+(1+2)                <font color="green">← 式を表示</font>
+<u>3 * =</u>
+((1+2)*3)
+<u>4 2 - / =</u>
+(((1+2)*3)/(4-2))
+</pre></code>
+上記の「...」の部分を埋めてExprCalcを完成させなさい．他の部分を変えてはいけない．
+<p>
+<u><b>ExprCalc.javaを提出しなさい．</b></u>
+<hr />
+<!-- 最初はコメントにしておく
+<font color="red">
+ヒント: Treeの2つのサブクラスのうち，Leafは整数の情報を記憶する葉を，
+Nodeは，左右の部分木(Tree型の値，たとえばleftとright)を持つ節を表す．
+<p>
+たとえば，「1 2 + 3 *」という入力で作られる木の形は:
+</p>
+<img src="123.png" alt="((1+2)*3)" width=30%>
+<p>
+となるが，1, 2, 3の情報はLeafのインスタンスに，+や*の情報はNodeのインスタンスに
+記憶させる．
+<p>
+Tree同士の演算は，左の部分木と右の部分木から，新しいNodeを作ればよい．
+</p>
+</font>
+ -->
+<hr />
+<h3>設問4: 式ツリーの評価</h3>
+ExprCalc を書き換えて(継承でなく，一から書き換えてよい)，
+「?」命令を入力すると，スタック内の式の値を有理数で計算して表示する TreeCalcを作りなさい．
+<h4>実行例: </h4>
+
+(<u>下線</u>が入力, <font color="green">緑字</font>は注釈．)
+<code><pre class="interaction">
+$ <u>java TreeCalc</u>
+<u>1 2 + =</u>
+(1+2)                <font color="green">← 式を表示</font>
+<u>?</u>
+3                    <font color="green">← 式の値を表示</font>
+<u>3 *  4 2 - / =</u>
+(((1+2)*3)/(4-2))
+<u>?</u>
+9/2
+</pre></code>
+ヒント: RatioCalc のインスタンスを作り，ADD_OP等を用いると簡単．
+<p>
+<h4>プログラムのおおまかな形(例)</h4>
+<code><pre class="program">
+import java.util.Deque;   // ←忘れがちなので注意．
+
+public class TreeCalc extends OOGCalc&lt;TreeCalc.Tree&gt; {
+    RatioCalc ratcalc = new RatioCalc();
+    abstract class Tree implements Numeric&lt;Tree&gt; {
+        public Tree add(Tree t) { return new Node(ratcalc.ADD_OP, this, t); }
+	...
+    }
+    class Leaf extends Tree {
+        int value;
+        Leaf(int value) { this.value = value; }
+        public String toString() { return Integer.toString(value); }
+        public RatioCalc.Rat eval() { return new RatioCalc.Rat(value); }
+    }
+    class Node extends Tree {
+        RatioCalc.BinOp op;
+        Tree left, right;
+        Node(RatioCalc.BinOp op, Tree left, Tree right) {
+	   ...
+        }
+	...
+    }
+    protected Tree fromInt(int v) {
+        ...
+    }
+    class ShowOp extends Op {
+        public String opName() { return "?"; }
+	...
+    }
+    TreeCalc() {
+        ...
+    }
+    public static void main(String[] args) {
+        new TreeCalc().run();
+    }
+}
+</pre></code>
+
+<p>
+<u><b>TreeCalc.javaを提出しなさい．</b></u>
+<!-- 最初はコメントにしておく 
+<hr />
+<font color="red">ヒント: Treeクラスに，値を計算するメソッド(たとえばeval() )を
+加える．Leafのeval()は，単に記憶している値をRatioにして返せば良い．
+Nodeのeval()は，対応する演算
+( RatioCalc型のインスタンスratioCalcを作ってあるとすると，
+ratioCalc.ADD_OP とか，ratioCalc.ops.get("+")とか)
+を実行して結果を返せば良い．
+</font>
+-->
+<hr />
+(ここまでが必須の課題である．将来，必要ならば，さらにヒントを示す．)
+
+<hr />
+2/1(水)までに課題をクリアしたい場合は，次の問題も解くこと．
+<h3>設問5: 10を作る問題</h3>
+
+かつて，電車にのる際に人々が必ず切符を買っていた頃，
+切符に印刷されている4桁の数字と加減乗除とカッコを使って，値が10になる
+数式を誰が最初に見つけられるかを競うという遊びがあった．
+<p>
+
+TreeCalcを元に，スタック内にある数値から10になる式を探し出す「make10」
+命令と，スタックの内容をすべて消去する(スタックを空にする)「clear」命令を
+加えたプログラムMake10を作りなさい．
+<ul>
+<li>簡単のため，数値を並べ替えずに作れる式だけを考えるものとする．
+</li>
+<li>数値の数は，4つには制限せず，スタックに入っている数字をすべて使う
+  ものとする．
+</li>
+<li>10が作れない場合は「解なし」と出力するものとする．
+</li>
+<li>解が複数存在する場合は，最初に見つかったものだけを出力する．
+</li>
+<li>make10命令を実行した後，スタックの値はどのようになってもかまわ
+  ない．
+</li>
+</ul>
+<h4>実行例: </h4>
+
+<p />
+(<u>下線</u>が入力, <font color="green">緑字</font>は注釈．)
+<code><pre class="interaction">
+$ <u>java Make10</u>
+<u>4 4 4 4 make10</u>
+解なし
+<u>clear 6 6 6 6 make10</u>
+解なし
+<u>clear 3 3 3 3 make10</u>
+((3*3)+(3/3))             <font color="green">(一例)</font>
+<u>clear 9 9 9 9 make10</u>
+((9+(9*9))/9)
+<u>clear 1 2 3 4 5 make10</u>
+(1+((2*(3+4))-5))         <font color="green">(一例)</font>
+<u>clear 1 2 3 4 5 6 make10</u>
+(1*(2/(3/(4+(5+6)))))     <font color="green">(一例)</font>
+</pre></code>
+
+<u><b>Make10.javaを提出しなさい．</b></u>
+
+<p />
+1/26(木)までに課題をクリアしたい場合は，さらに次の問題も解くこと．
+<h3>設問6: 並べ替えも考慮して10を作る</h3>
+
+Make10に，並べ替えも考慮して10を作る命令「make10perm」も加えなさい．
+
+(<u>下線</u>が入力, <font color="green">緑字</font>は注釈．)
+<code><pre class="interaction">
+$ <u>java Make10</u>
+<u>clear 3 6 3 6 make10perm</u>
+((3*3)+(6/6))           <font color="green">(一例)</font>
+<u>clear 9 9 1 1 make10perm</u>
+((1+(1/9))*9)           <font color="green">(一例)</font>
+<u>clear 1 1 5 8 make10perm</u>
+(8/(1-(1/5)))
+<u>clear 3 1 7 3 make10perm</u>
+(3*(1+(7/3)))           <font color="green">(一例)</font>
+</pre></code>
+
+<u><b>make10permを加えたMake10.javaを提出しなさい．</b></u>
+
+</body>
+</html>

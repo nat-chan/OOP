@@ -1,4 +1,8 @@
-*.class
+*.class #ソースのみの管理とする
 /kadai1
-*~
+
+*~ #emacsのバックアップファイル
 \#*\#
+
+*.bak
+*.zip #前田先生がpublic_htmlにzipを置いているので追加
