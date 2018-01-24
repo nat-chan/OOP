@@ -154,7 +154,7 @@ Javaでは，「集合」「列」「写像」などの
 を用いる．
 
 ***
- 追記　elect       
+ 追記　elect                               
  void add(int index, E element) : index番目に要素を入れる、最後に入れるなら add(0, element)        
  boolean add(E e) : 先頭にelement を入れる        
 ***       
