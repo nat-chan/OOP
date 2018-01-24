@@ -239,9 +239,9 @@ borage36:~ maeda$
 
 ***
 追記 elect
-Omikuji3Testー＞printメソッド：Omikujiに定義
-Omikuji3Testー＞firstメソッド：Omikuji2に定義
-Omikuji3Testー＞secondメソッド：Omikuji3に定義
+Omikuji3Testー＞printメソッド：Omikujiに定義    
+Omikuji3Testー＞firstメソッド：Omikuji2に定義     
+Omikuji3Testー＞secondメソッド：Omikuji3に定義    
 ***
 
 ### 設問2
