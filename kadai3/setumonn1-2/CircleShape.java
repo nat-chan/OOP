@@ -6,7 +6,7 @@ class CircleShape extends Shape {
 	this.r = r;
     }
     boolean inside(double x, double y) {
-	return  -(x-x0)*(x-x0)-y0+r<=y&&y<=(x-x0)*(x-x0)+y0-r&&
-	    x>=(y-y0)(y-y0)+x0+r&&x<=-(y-y0)(y-y0)-x0-r; }
+	return  (x-x0)*(x-x0)+(y-y0)*(y-y0)<=r*r;
+    }
 }
 
