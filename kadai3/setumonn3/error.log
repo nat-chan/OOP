@@ -1,0 +1,36 @@
+DotViewTriangle.java:5: エラー: シンボルを見つけられません
+        RobotModel robot = new RobotModel();
+        ^
+  シンボル:   クラス RobotModel
+  場所: クラス DotViewTriangle
+DotViewTriangle.java:5: エラー: シンボルを見つけられません
+        RobotModel robot = new RobotModel();
+                               ^
+  シンボル:   クラス RobotModel
+  場所: クラス DotViewTriangle
+Polygon.java:3: エラー: シンボルを見つけられません
+        RobotModel robot = new RobotModel();
+        ^
+  シンボル:   クラス RobotModel
+  場所: クラス Polygon
+Polygon.java:3: エラー: シンボルを見つけられません
+        RobotModel robot = new RobotModel();
+                               ^
+  シンボル:   クラス RobotModel
+  場所: クラス Polygon
+Polygon.java:4: エラー: シンボルを見つけられません
+        RobotView view = new ScreenView();
+                             ^
+  シンボル:   クラス ScreenView
+  場所: クラス Polygon
+SimpleViewTriangle.java:3: エラー: シンボルを見つけられません
+        RobotModel robot = new RobotModel();
+        ^
+  シンボル:   クラス RobotModel
+  場所: クラス SimpleViewTriangle
+SimpleViewTriangle.java:3: エラー: シンボルを見つけられません
+        RobotModel robot = new RobotModel();
+                               ^
+  シンボル:   クラス RobotModel
+  場所: クラス SimpleViewTriangle
+エラー7個
