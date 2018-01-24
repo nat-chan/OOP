@@ -153,7 +153,7 @@ Javaでは，「集合」「列」「写像」などの
 [addメソッド](http://docs.oracle.com/javase/jp/7/api/java/util/Set.html#add(E))
 を用いる．
 
-;; 追記　elect         
+;; 追記　elect         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;        
 void add(int index, E element) : index番目に要素を入れる、最後に入れるなら add(0, element)        
 boolean add(E e) : 先頭にelement を入れる        
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;        
