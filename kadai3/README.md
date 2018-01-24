@@ -544,3 +544,8 @@ class C implements I {}
 7.  I b = new B();
 8.  I c = new C();
 
+*** 
+electmemo    
+
+https://manaba.tsukuba.ac.jp/ct/course_781273_drill_882039_answerlog_1187834
+
