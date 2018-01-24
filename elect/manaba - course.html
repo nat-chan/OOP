@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<!-- saved from url=(0076)https://manaba.tsukuba.ac.jp/ct/course_781273_drill_882039_answerlog_1187834 -->
+<html class="gr__manaba_tsukuba_ac_jp"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+ 
+ <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="Content-Script-Type" content="text/javascript">
+ <meta http-equiv="pragma" content="no-cache">
+   <meta name="robots" content="NOINDEX, NOFOLLOW">
+  
+      <link rel="apple-touch-icon" href="https://manaba.tsukuba.ac.jp/manaba-iconV2.png">
+       <link rel="shortcut icon" href="https://manaba.tsukuba.ac.jp/faviconV2.ico" type="image/x-icon">
+   
+   <link rel="stylesheet" href="./manaba - course_files/browser_std.css" type="text/css">
+  <link rel="stylesheet" href="./manaba - course_files/portal.css" type="text/css">
+    <link rel="stylesheet" href="./manaba - course_files/fontsize_m.css" type="text/css">
+    <link rel="stylesheet" href="./manaba - course_files/color_1.css" type="text/css">
+ 
+ <title>manaba - course</title>
+ <script src="./manaba - course_files/d3.min.js.ダウンロード" type="text/javascript"></script><style>@media print {#ghostery-purple-box {display:none !important}}</style>
+  <script type="text/javascript" language="Javascript1.5" src="./manaba - course_files/webat.js.ダウンロード">
+</script>
+<script type="text/javascript">
+var gLang = "ja";
+manaba.fixChromeScroll = 1;
+manaba.tpanelnowloading = 0;
+manaba.embeddedCalendarTodayButton = 1;
+manaba.useMathJax = 1;
+manaba.SystemUnixTime = "5A67D3D6";
+manaba.sessioncheck_interval = 3600;
+manaba.sessioncheck_last = "5A67D3D6";
+ manaba.xhr_csrf_token = "H4sIAAAAAAAA/2Ph5DA0MjYxNTO3YOHg4GBmZGBg4FJIS0oyNbA0TjUxNUgxME0xSrKwsEw0SDU0NrVMNE01teQEqgpOLS7OzM/zTAEANkVoHkMAAAA=";
+manaba.storeTableSortField = 0;
+manaba.inputImageTitleFix = 0;
+manaba.useWebSocketSubscription = 0;
+manaba.WebSocketSubscriptionTokens = [];
+manaba.WebSocketSubscriptionHandlers = {};
+manaba.WebSocketSubscriberInterval = 0 || 10000;
+manaba.WebSocketSubscriberIntervalHandlers = [];
+manaba.WebSocketSubscriberErrorHandlers = [];
+manaba.WebSocketSubscriberConnectionErrorHandlers = [];
+manaba.ExportTextAreaCounterUpdater = 0;
+manaba.dateLoaded = new Date();
+manaba.usejsonparse = 1;
+manaba.reproduct95908 = 0;
+manaba.disable_submit_button_active = 0;
+</script>
+ <script type="text/javascript" language="Javascript1.5" src="./manaba - course_files/manaba.js.ダウンロード">
+ </script>
+  <script type="text/x-mathjax-config;executed=true">
+ MathJax.Hub.Config({ tex2jax:
+ { inlineMath: [["\\(","\\)"]]
+ , displayMath: [["\\[","\\]"]]
+ , ignoreClass: ".*"
+ , processClass: "embedded-mathjax"
+ }, TeX:
+ { extensions: ["autobold.js","begingroup.js","color.js","mhchem.js"]
+ }
+});
+</script>
+<script type="text/javascript" src="./manaba - course_files/MathJax.js.ダウンロード">
+</script>
+  <script type="text/javascript">
+manaba.useBoardStateSave = 1;
+manaba.enableMovablePanel = 0;
+manaba.enableExtraHTTPHeaders = 1;
+manaba.postMessageOrigin = "";
+manaba.enableInsertWithoutRange = 1;
+manaba.tpanelblockchattering = 1;
+manaba.useHTMLPanel = 1;
+
+manaba.closebox = function(self,oid) {
+ document.getElementById('board-boxV2-body' + oid).style.display='none';
+ self.style.display='none';
+ document.getElementById('board-box-more' + oid).style.display='none';
+ document.getElementById('board-box-visible' + oid).style.display='inline';
+ document.getElementById('more-list' + oid).style.display='block';
+ if (manaba.useBoardStateSave) {
+  manaba.ajaxgetbody("?action=closeboard&boardoid=" + oid);
+ }
+}
+manaba.openbox = function(self,oid) {
+ document.getElementById('board-boxV2-body' + oid).style.display='block';
+ self.style.display='none';
+ document.getElementById('board-box-more' + oid).style.display='inline';
+ document.getElementById('board-box-hidden' + oid).style.display='inline';
+ document.getElementById('more-list' + oid).style.display='none';
+ if (manaba.useBoardStateSave) {
+  manaba.ajaxgetbody("?action=openboard&boardoid=" + oid);
+ }
+}
+
+// for member selector
+manaba.groupmemberselector_foreach = function(cb) {
+ var root = document.getElementById('manaba_groupmember_selector');
+ if (! root) {
+  return;
+ }
+ var elements = getElementsByClass('manaba_groupmember_selector', root, 'input');
+ var elen = elements.length;
+ for (var i = 0; i < elen; ++i) {
+  cb(elements[i]);
+ }
+};
+manaba.groupmemberselector_checkall = function() {
+ manaba.groupmemberselector_foreach(function(elem){ elem.checked = true; }); return false;
+};
+
+manaba.groupmemberselector_join_values = function(glue) {
+ if (glue == null) {
+  glue = ' ';
+ }
+ var result = '';
+ manaba.groupmemberselector_foreach(function(elem){
+  if (elem.checked) {
+   result += glue + elem.value;
+  }
+ });
+ return result;
+};
+
+manaba.append_hiddens = function(form, hiddens) {
+ for (var i = 0; i + 1 < hiddens.length; i += 2) {
+  var h = document.createElement("input");
+  h.type = "hidden";
+  h.name = hiddens[i]
+  h.value = hiddens[i + 1]
+  form.appendChild(h);
+ }
+};
+
+manaba.append_hidden_value_and_submit = function(hidden_id, val, glue, opt) {
+ var hidden = document.getElementById(hidden_id);
+ if (glue == null) {
+  glue = ' ';
+ }
+ old_value = hidden.value;
+ if (old_value == null) {
+  old_value = '';
+ } else if (old_value != '') {
+  old_value += glue;
+ }
+ hidden.value = old_value + val;
+
+ if (opt && opt['hiddens']) { manaba.append_hiddens(hidden.form, opt['hiddens']); }
+
+ if (opt && opt['withbutton']) {
+  manaba.submit_with_button(hidden.form, opt['withbutton']);
+ } else {
+  hidden.form.submit();
+ }
+};
+
+manaba.groupmemberselector_append_values_and_submit = function(hidden_id, glue, button) {
+ manaba.append_hidden_value_and_submit(hidden_id, manaba.groupmemberselector_join_values(glue), glue,
+  { 'withbutton': button }
+  );
+};
+
+manaba.set_hidden_value_and_submit = function(hidden_id, val, opt) {
+ var hidden = document.getElementById(hidden_id);
+ hidden.value = val;
+
+ if (opt && opt['hiddens']) { manaba.append_hiddens(hidden.form, opt['hiddens']); }
+ hidden.form.submit();
+};
+
+manaba.tsubmitter_set_hidden = function(hidden_id, opt) {
+ return function(val) {
+  manaba.set_hidden_value_and_submit(hidden_id, val, opt);
+ };
+};
+manaba.tsubmitter_append_hidden = function(hidden_id, glue, opt) {
+ return function(val) {
+  manaba.append_hidden_value_and_submit(hidden_id, val, glue, opt);
+ };
+};
+
+manaba.addressblankchecker = function(input, button, inusetext) {
+ return function(e) {
+  if (input.value.match(/[^,\s]/)  && button.value !== inusetext) {
+   button.disabled = false;
+  } else {
+   button.disabled = true;
+   var keycode, typename;
+   if (window.event) {
+    keycode = window.event.keyCode;
+    typename = window.event.type;
+   } else if (e) {
+    keycode = e.which;
+    typename = e.type;
+   }
+   if (typename && typename.toLowerCase() === "keypress" && keycode === 13) {
+    if (window.event) {
+     window.event.returnValue = false;
+    } else if (e) {
+     e.preventDefault();
+    }
+   }
+  }
+ };
+};
+
+manaba.blankchecker = function(input, button, inusetext) {
+ return function(e) {
+  if (input.value !== "" && button.value !== inusetext) {
+   button.disabled = false;
+  } else {
+   button.disabled = true;
+   var keycode, typename;
+   if (window.event) {
+    keycode = window.event.keyCode;
+    typename = window.event.type;
+   } else if (e) {
+    keycode = e.which;
+    typename = e.type;
+   }
+   if (typename && typename.toLowerCase() === "keypress" && keycode === 13) {
+    if (window.event) {
+     window.event.returnValue = false;
+    } else if (e) {
+     e.preventDefault();
+    }
+   }
+  }
+ };
+};
+
+manaba.add_inputchecker = function (input_id, button_id, factory, inusetext) {
+ var input = document.getElementById(input_id);
+ var button = document.getElementById(button_id);
+ var updater = factory(input, button, inusetext);
+ manaba.addevent(input, "keypress", updater);
+ manaba.addevent(input, "input", updater);
+ if (gBrowser.isIE) {
+  manaba.addevent(input, "keyup", updater);
+  manaba.addevent(input, "mouseout", updater);
+  manaba.addevent(input, "propertychange", updater);
+ }
+ updater();
+};
+
+manaba.join_checked_values = function (opt) {
+ var result = '';
+ if (! opt) { return result; }
+ var name = opt && opt['name'];
+ if (! name) { return result; }
+ var root = opt ['root'];
+ if (! root) {
+  var e = opt['event'];
+  if (e) {
+   var target = evtarget(e);
+   if (target) {
+    root = target.form;
+   }
+  }
+ }
+ if (! root) { return result; }
+
+ var glue = ('glue' in opt) ? opt['glue'] : ' ';
+ manaba.descendants_foreach(root, function(elem) {
+  if (elem.nodeType == 1 && elem.tagName == 'INPUT' && elem.name == name && elem.checked) {
+   if (result != '') {
+    result += glue;
+   }
+   result += elem.value;
+  }
+ });
+
+ return result;
+};
+
+
+
+manaba.pulldownmenu_img_id = function(id) {
+ return 'pulldownmenu_img_' + id;
+}
+
+manaba.pulldownmenu_id = function(id) {
+ return 'pulldownmenu_id_' + id;
+}
+
+manaba.pulldownmenu = function(id, e) {
+
+  var atarget = evtarget(e);
+  var img_target = manaba.pulldownmenu_img_id(id);
+  var pulldownnode = document.getElementById(img_target);
+  var meta = {};
+  if (pulldownnode["manaba_pulldown_meta"]) {
+    meta = pulldownnode["manaba_pulldown_meta"];
+  } else {
+    pulldownnode["manaba_pulldown_meta"] = meta;
+    meta.visible_ptarget_id = null;
+  }
+
+  var bodynode = document.body;
+
+  var pulldownmenu_closer;
+  var pulldownmenu_cleanup = function() {
+
+    if (meta.visible_ptarget_id == null) {
+      return;
+    }
+
+    var visible_ptarget = manaba.pulldownmenu_id(meta.visible_ptarget_id);
+    var elm = document.getElementById(visible_ptarget);
+    if (elm != null) {
+      var img_target = manaba.pulldownmenu_img_id(meta.visible_ptarget_id);
+      ImageBlur(document.getElementById(img_target));
+      elm.style.display='none';
+      meta.visible_ptarget_id = null;
+    }
+    manaba.removeevent(bodynode, 'click', pulldownmenu_closer);
+  };
+  meta.cleanup = pulldownmenu_cleanup;
+
+
+ var pulldownmenu_closer = function(e) {
+    var ctarget = evtarget(e);
+    // this pulldown is just opened now.
+    if (ctarget == atarget) {
+      return;
+    }
+    // clicked inside this pulldown.
+    var pulldown_target = manaba.pulldownmenu_id(id);
+    var pulldown_elm = document.getElementById(pulldown_target);
+    if (manaba.isAncestor(ctarget, pulldown_elm)) {
+      return;
+    }
+    pulldownmenu_cleanup();
+  };
+
+
+  if (meta.visible_ptarget_id == id) {
+    pulldownmenu_cleanup();
+  } else {
+    pulldownmenu_cleanup();
+
+    if (pulldownnode != null) {
+      manaba.addevent(bodynode, 'click', pulldownmenu_closer);
+
+      ImageFocus(pulldownnode);
+
+      var pulldown_target = manaba.pulldownmenu_id(id);
+      var pulldown_elm = document.getElementById(pulldown_target);
+
+      pulldown_elm.style.display='block';
+      meta.visible_ptarget_id = id;
+    }
+  }
+  return;
+};
+
+manaba.ancestor_pulldownnode = function(o) {
+ while (o) {
+  if ("manaba_pulldown_meta" in o) {
+   return o;
+  }
+  o = o.parentNode;
+ }
+ return null;
+};
+
+manaba.pulldown_close = function(e) {
+ return manaba.pulldown_close_by_target(evtarget(e));
+};
+
+manaba.pulldown_close_by_target = function(target) {
+ target = manaba.ancestor_pulldownnode(target);
+ meta = target && target["manaba_pulldown_meta"];
+ if (meta && meta.cleanup) { meta.cleanup(); }
+ return false;
+};
+
+manaba.pulldownmenu_ImageFocus = function(o) {
+  var pulldownnode = o;
+  var meta = pulldownnode && pulldownnode["manaba_pulldown_meta"];
+  if (! meta || manaba.pulldownmenu_img_id(meta.visible_ptarget_id) != o.id) {
+    ImageFocus(o);
+  }
+};
+
+manaba.pulldownmenu_ImageBlur = function(o) {
+  var pulldownnode = o;
+  var meta = pulldownnode && pulldownnode["manaba_pulldown_meta"];
+  if (! meta || manaba.pulldownmenu_img_id(meta.visible_ptarget_id) != o.id) {
+    ImageBlur(o);
+  }
+};
+
+
+
+ </script>
+     <style type="text/css">
+    .articletext, .querybody,.articletext *,  .msg-text, .querybody *, .thread .articlebody *, .msg-text *
+{
+    font-family:'ヒラギノ角ゴ Pro W3','Arial',Verdana,'ＭＳ Ｐゴシック',sans-serif;
+    }
+         .msg-text pre ,body.rteditor pre,.articlebody pre,.articletext pre, .articlebody .articlebody-msgbody pre{
+    color: black;
+    font-family: "Courier New",Courier,fixed;
+    font-size: 100%;
+    line-height: 1.3;
+    margin-left: 4px;
+    margin-top: 0.5em;
+    padding-top: 0;
+    white-space: pre-wrap;
+    word-break: break-all;
+      }
+        </style>  
+    <style type="text/css">  
+        table.stdlist-report, table.stdlist-query{
+         word-wrap: break-word;
+       }
+    table.stdlist-query td.word-break {
+        max-width: 450px;
+      }
+   table.stdlist-report td{
+       max-width:546px;
+    }
+
+      table.queryshow{
+      table-layout:fixed;
+     }
+      .reporttext-body{
+         word-wrap: break-word;
+       }
+    </style>  
+     <style type="text/css">  
+      .queryv4 .articletext ,.queryv4 .articlebody, .queryv4 td.articlebody .querypaper{
+        overflow-x:auto;
+      } 
+   </style>
+       <style type="text/css">
+     .queryv4 div.permutation-response-field{
+        height:auto;
+        min-height:20px;
+       }
+   </style>
+                 <style type="text/css">
+    .syllabus .articlebody-teacherview h1{
+    background-color: #f7f7f7;
+    background-image: none;
+    border-left: 6px solid #99CF3E !important;
+    padding-left: 8px;
+     }
+    .syllabus .teacherview  .articlebody-teacherview h1{
+    background-color: #f7f7f7;
+    background-image: none;
+    border-left: 6px solid #babfc4 !important;
+      }
+   .teacherview .articlebody-teacherview h2{
+         color: #666;
+      }
+   .teacherview .articlebody ul li{
+   list-style-image:url("/marker-diamond-teacherview.png")
+    }
+#panel_frame .qcantpubpanel{
+    background-color: #FFFFFF;
+    padding: 40px 20px 20px;
+    text-align: center;
+   width:420px;
+}
+     </style>
+  
+         <style type="text/css">
+        .linkballoon {
+           z-index:201;
+          }
+         .project-body .threadV3 .articlesubject {
+             width: 555px;
+         }
+            .thread-tree .msgcontainer .articlecontainer-deleted .articleheader{
+              background-image: none;
+              border-bottom: 1px solid #b9b9b9;
+          }
+          .queryv4 div.permutation-choice.required.unfilled{
+              border:medium none;
+          }
+          .queryv4 div.permutation-choice.required.unfilled{
+              border:medium none;
+          }
+           .queryv4  .hilite_required_on_submit div.permutation-choice.required.unfilled{
+              border:2px solid red;
+          }
+      </style>
+          <style type="text/css">
+     .articlefiles-reporthtml li.checked, .querypaper li.checked{
+      font-weight:bold;
+     }
+     table.edit-reportaddform td textarea.form-input-text, table.edit-reportmodform td textarea.form-input-text {
+      height: 150px;
+      width: 410px;
+     }
+.thread-tree .msgcontainer .articlecontainer-deleted .articleheader {
+    background-image: url(/button_deleted_box-open.png);
+}
+.thread-tree .msgcontainer .articlecontainer-deleted .articleheader:hover {
+    background-image: url(/button_deleted_box-open-focus.png);
+}
+.thread-tree .msgcontainerbody .articlecontainer-deleted .articleheader {
+    background-image: url(/button_deleted_box-close.png);
+}
+.thread-tree .msgcontainerbody .articlecontainer-deleted .articleheader:hover {
+    background-image: url(/button_deleted_box-close-focus.png);
+}
+.thread-tree .threadchildlist .articlecontainer-deleted .articleheader, 
+.thread-tree .threadchildlist .articlecontainer-deleted .articleheader:hover{
+   background-image:none;
+}
+.project-body .inlineaf-description{
+   padding-left:30px;
+}
+   .info-list-card-body .showmore{
+     padding-bottom:5px;
+    padding-right:15px;
+  }
+   .top-contents-list .showmore{
+    padding-right:15px;
+ }
+
+.info-list-card-body ul, .info-list-card-body .groupnewslist, .groupnews-body .groupnewslist, .groupthreadlist {
+    height: 155px;
+ }
+    </style>
+            <style type="text/css">
+             .thread-tree div.articlebody-msgbody .parentmsg-no {
+               display: block;
+               }
+      </style>
+            <style type="text/css">
+    .queryv4 .articletext, .queryv4 .articlebody, .queryv4 td.articlebody .querypaper{
+      max-height:none;
+      overflow-y:visible;
+     }
+     </style>
+           <style type="text/css">
+     input[type="button"],input[type="submit"],input[type="reset"]{
+      cursor:pointer;
+    /*     font-size: 12px;*/
+  color: #323232;
+  text-decoration: none;
+  /* ボタンのレイアウト*/
+  /*margin: 0px 3px;*/
+  padding: 3px 10px;
+  /* ボタンの色*/
+  background: -moz-linear-gradient(top, #ffffff 0%, #f8f8f8 40%, #e2e2e2 95%, #ffffff);
+  background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), color-stop(0.4, #f8f8f8), color-stop(0.95, #e2e2e2), to(#ffffff));
+  background: linear-gradient(to bottom, #ffffff 0%, #f8f8f8 40%, #e2e2e2 95%, #ffffff);
+  /* 角丸 */
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  /* ボタンの枠線*/
+  border: 1px solid;
+  border-color: #929292;
+  /* ボックスシャドウ */
+ /* -moz-box-shadow: 1px 1px 1px rgba(20, 20, 20, 0.15), inset 0px 0px 2px white;*/
+ /* -webkit-box-shadow: 1px 1px 1px rgba(20, 20, 20, 0.15), inset 0px 0px 2px white;*/
+ /* box-shadow: 1px 1px 1px rgba(20, 20, 20, 0.15), inset 0px 0px 2px white;*/
+  /* 文字シャドウ*/
+  /*text-shadow: 1px 1px 0px white;*/
+  min-height: 25px;
+   }
+     input[type="button"][disabled],input[type="submit"][disabled],input[type="reset"][disabled],
+     input[type="button"][disabled]:hover,input[type="submit"][disabled]:hover,input[type="reset"][disabled]:hover{
+      background:#f8f8f8;
+     color:#999;
+     cursor:default;
+   }
+     input[type="button"]:hover,input[type="submit"]:hover,input[type="reset"]:hover{
+  background:#e3e3e3;
+}
+   </style>
+  
+     <style type="text/css">
+div.navigator {
+    background-color: #f2f2f2;
+    border-bottom: 1px solid #ccc;
+    border-left: medium none;
+    border-top: 1px solid #ccc;
+    font-size: 90%;
+    margin: 8px 0;
+    padding: 4px 6px;
+}
+div.navigator span {
+    display: inline-block;
+    padding: 0 5px;
+    vertical-align:middle;
+    min-height: 1.6em;
+}
+div.navigator a, .navigator .pager-now {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    display: inline-block;
+     min-height: 1.6em;
+    padding: 1px 7px;
+    vertical-align: middle;
+}
+div.navigator a.text-link{
+    background-color: #f2f2f2;
+    border-color: #f2f2f2;
+    margin:0;padding:0;
+}
+
+div.navigator .pager-now {
+    background-color: #c2c2c2;
+    color: #fff;
+    font-weight: bold;
+}
+div.navigator  div.pager-change a{
+   border:medium none;
+    background-color: transparent;
+    padding:1px;
+}
+
+div.navigator .pager-disable {
+    background-color: #f2f2f2;
+    border-color: #f2f2f2;
+    color: #3c3c3c;
+    font-weight: normal;
+}
+   </style>
+           <style type="text/css">.MathJax_Hover_Frame {border-radius: .25em; -webkit-border-radius: .25em; -moz-border-radius: .25em; -khtml-border-radius: .25em; box-shadow: 0px 0px 15px #83A; -webkit-box-shadow: 0px 0px 15px #83A; -moz-box-shadow: 0px 0px 15px #83A; -khtml-box-shadow: 0px 0px 15px #83A; border: 1px solid #A6D ! important; display: inline-block; position: absolute}
+.MathJax_Hover_Arrow {position: absolute; width: 15px; height: 11px; cursor: pointer}
+</style><style type="text/css">#MathJax_About {position: fixed; left: 50%; width: auto; text-align: center; border: 3px outset; padding: 1em 2em; background-color: #DDDDDD; color: black; cursor: default; font-family: message-box; font-size: 120%; font-style: normal; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 15px; -webkit-border-radius: 15px; -moz-border-radius: 15px; -khtml-border-radius: 15px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+.MathJax_Menu {position: absolute; background-color: white; color: black; width: auto; padding: 2px; border: 1px solid #CCCCCC; margin: 0; cursor: default; font: menu; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+.MathJax_MenuItem {padding: 2px 2em; background: transparent}
+.MathJax_MenuArrow {position: absolute; right: .5em; color: #666666}
+.MathJax_MenuActive .MathJax_MenuArrow {color: white}
+.MathJax_MenuArrow.RTL {left: .5em; right: auto}
+.MathJax_MenuCheck {position: absolute; left: .7em}
+.MathJax_MenuCheck.RTL {right: .7em; left: auto}
+.MathJax_MenuRadioCheck {position: absolute; left: 1em}
+.MathJax_MenuRadioCheck.RTL {right: 1em; left: auto}
+.MathJax_MenuLabel {padding: 2px 2em 4px 1.33em; font-style: italic}
+.MathJax_MenuRule {border-top: 1px solid #CCCCCC; margin: 4px 1px 0px}
+.MathJax_MenuDisabled {color: GrayText}
+.MathJax_MenuActive {background-color: Highlight; color: HighlightText}
+.MathJax_Menu_Close {position: absolute; width: 31px; height: 31px; top: -15px; left: -15px}
+</style><style type="text/css">#MathJax_Zoom {position: absolute; background-color: #F0F0F0; overflow: auto; display: block; z-index: 301; padding: .5em; border: 1px solid black; margin: 0; font-weight: normal; font-style: normal; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; box-shadow: 5px 5px 15px #AAAAAA; -webkit-box-shadow: 5px 5px 15px #AAAAAA; -moz-box-shadow: 5px 5px 15px #AAAAAA; -khtml-box-shadow: 5px 5px 15px #AAAAAA; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_ZoomOverlay {position: absolute; left: 0; top: 0; z-index: 300; display: inline-block; width: 100%; height: 100%; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+#MathJax_ZoomFrame {position: relative; display: inline-block; height: 0; width: 0}
+#MathJax_ZoomEventTrap {position: absolute; left: 0; top: 0; z-index: 302; display: inline-block; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+</style><style type="text/css">.MathJax_Preview {color: #888}
+#MathJax_Message {position: fixed; left: 1em; bottom: 1.5em; background-color: #E6E6E6; border: 1px solid #959595; margin: 0px; padding: 2px 8px; z-index: 102; color: black; font-size: 80%; width: auto; white-space: nowrap}
+#MathJax_MSIE_Frame {position: absolute; top: 0; left: 0; width: 0px; z-index: 101; border: 0px; margin: 0px; padding: 0px}
+.MathJax_Error {color: #CC0000; font-style: italic}
+</style></head>
+
+<body onload="OnLoadHandler(); FocusOnLoad(); " class="
+  queryanswermode
+     queryformV2           " data-gr-c-s-loaded="true"><div id="MathJax_Message" style="display: none;"></div>
+
+ 
+  <svg width="0" height="0" style="position:absolute">
+<defs>
+	<pattern id="fillpat1" patternUnits="userSpaceOnUse" width="16" height="16">
+<rect fill="#80AA00" x="0" y="0" width="16" height="16"></rect>
+<g font="family=&quot;sans-serif&quot;" font-size="8" fill="white">
+ <text x="4" y="8" text-anchor="middle">1</text>
+ <text x="12" y="16" text-anchor="middle">1</text>
+</g>
+</pattern>
+	<pattern id="fillpat2" patternUnits="userSpaceOnUse" width="16" height="16">
+<rect fill="#F18D00" x="0" y="0" width="16" height="16"></rect>
+<g font="family=&quot;sans-serif&quot;" font-size="8" fill="white">
+ <text x="4" y="8" text-anchor="middle">2</text>
+ <text x="12" y="16" text-anchor="middle">2</text>
+</g>
+</pattern>
+	<pattern id="fillpat3" patternUnits="userSpaceOnUse" width="16" height="16">
+<rect fill="#43A0DD" x="0" y="0" width="16" height="16"></rect>
+<g font="family=&quot;sans-serif&quot;" font-size="8" fill="white">
+ <text x="4" y="8" text-anchor="middle">3</text>
+ <text x="12" y="16" text-anchor="middle">3</text>
+</g>
+</pattern>
+	<pattern id="fillpat4" patternUnits="userSpaceOnUse" width="16" height="16">
+<rect fill="#ED6B8D" x="0" y="0" width="16" height="16"></rect>
+<g font="family=&quot;sans-serif&quot;" font-size="8" fill="white">
+ <text x="4" y="8" text-anchor="middle">4</text>
+ <text x="12" y="16" text-anchor="middle">4</text>
+</g>
+</pattern>
+	<pattern id="fillpat5" patternUnits="userSpaceOnUse" width="16" height="16">
+<rect fill="#8565AF" x="0" y="0" width="16" height="16"></rect>
+<g font="family=&quot;sans-serif&quot;" font-size="8" fill="white">
+ <text x="4" y="8" text-anchor="middle">5</text>
+ <text x="12" y="16" text-anchor="middle">5</text>
+</g>
+</pattern>
+	<pattern id="fillpat6" patternUnits="userSpaceOnUse" width="16" height="16">
+<rect fill="#E8B400" x="0" y="0" width="16" height="16"></rect>
+<g font="family=&quot;sans-serif&quot;" font-size="8" fill="white">
+ <text x="4" y="8" text-anchor="middle">6</text>
+ <text x="12" y="16" text-anchor="middle">6</text>
+</g>
+</pattern>
+	<pattern id="fillpat7" patternUnits="userSpaceOnUse" width="16" height="16">
+<rect fill="#268A68" x="0" y="0" width="16" height="16"></rect>
+<g font="family=&quot;sans-serif&quot;" font-size="8" fill="white">
+ <text x="4" y="8" text-anchor="middle">7</text>
+ <text x="12" y="16" text-anchor="middle">7</text>
+</g>
+</pattern>
+	<pattern id="fillpat8" patternUnits="userSpaceOnUse" width="16" height="16">
+<rect fill="#CD504D" x="0" y="0" width="16" height="16"></rect>
+<g font="family=&quot;sans-serif&quot;" font-size="8" fill="white">
+ <text x="4" y="8" text-anchor="middle">8</text>
+ <text x="12" y="16" text-anchor="middle">8</text>
+</g>
+</pattern>
+	<pattern id="fillpat9" patternUnits="userSpaceOnUse" width="16" height="16">
+<rect fill="#0272C1" x="0" y="0" width="16" height="16"></rect>
+<g font="family=&quot;sans-serif&quot;" font-size="8" fill="white">
+ <text x="4" y="8" text-anchor="middle">9</text>
+ <text x="12" y="16" text-anchor="middle">9</text>
+</g>
+</pattern>
+	<pattern id="fillpat10" patternUnits="userSpaceOnUse" width="16" height="16">
+<rect fill="#8C8C8C" x="0" y="0" width="16" height="16"></rect>
+<g font="family=&quot;sans-serif&quot;" font-size="5" fill="white">
+ <text x="4" y="8" text-anchor="middle">10</text>
+ <text x="12" y="16" text-anchor="middle">10</text>
+</g>
+</pattern>
+	<pattern id="fillpat11" patternUnits="userSpaceOnUse" width="16" height="16">
+<rect fill="#80AA00" x="0" y="0" width="16" height="16"></rect>
+<g font="family=&quot;sans-serif&quot;" font-size="5" fill="white">
+ <text x="4" y="8" text-anchor="middle">11</text>
+ <text x="12" y="16" text-anchor="middle">11</text>
+</g>
+</pattern>
+	<pattern id="fillpat12" patternUnits="userSpaceOnUse" width="16" height="16">
+<rect fill="#F18D00" x="0" y="0" width="16" height="16"></rect>
+<g font="family=&quot;sans-serif&quot;" font-size="5" fill="white">
+ <text x="4" y="8" text-anchor="middle">12</text>
+ <text x="12" y="16" text-anchor="middle">12</text>
+</g>
+</pattern>
+	<pattern id="fillpat13" patternUnits="userSpaceOnUse" width="16" height="16">
+<rect fill="#43A0DD" x="0" y="0" width="16" height="16"></rect>
+<g font="family=&quot;sans-serif&quot;" font-size="5" fill="white">
+ <text x="4" y="8" text-anchor="middle">13</text>
+ <text x="12" y="16" text-anchor="middle">13</text>
+</g>
+</pattern>
+	<pattern id="fillpat14" patternUnits="userSpaceOnUse" width="16" height="16">
+<rect fill="#ED6B8D" x="0" y="0" width="16" height="16"></rect>
+<g font="family=&quot;sans-serif&quot;" font-size="5" fill="white">
+ <text x="4" y="8" text-anchor="middle">14</text>
+ <text x="12" y="16" text-anchor="middle">14</text>
+</g>
+</pattern>
+	<pattern id="fillpat15" patternUnits="userSpaceOnUse" width="16" height="16">
+<rect fill="#8565AF" x="0" y="0" width="16" height="16"></rect>
+<g font="family=&quot;sans-serif&quot;" font-size="5" fill="white">
+ <text x="4" y="8" text-anchor="middle">15</text>
+ <text x="12" y="16" text-anchor="middle">15</text>
+</g>
+</pattern>
+	<pattern id="fillpat16" patternUnits="userSpaceOnUse" width="16" height="16">
+<rect fill="#E8B400" x="0" y="0" width="16" height="16"></rect>
+<g font="family=&quot;sans-serif&quot;" font-size="5" fill="white">
+ <text x="4" y="8" text-anchor="middle">16</text>
+ <text x="12" y="16" text-anchor="middle">16</text>
+</g>
+</pattern>
+	<pattern id="fillpat17" patternUnits="userSpaceOnUse" width="16" height="16">
+<rect fill="#268A68" x="0" y="0" width="16" height="16"></rect>
+<g font="family=&quot;sans-serif&quot;" font-size="5" fill="white">
+ <text x="4" y="8" text-anchor="middle">17</text>
+ <text x="12" y="16" text-anchor="middle">17</text>
+</g>
+</pattern>
+	<pattern id="fillpat18" patternUnits="userSpaceOnUse" width="16" height="16">
+<rect fill="#CD504D" x="0" y="0" width="16" height="16"></rect>
+<g font="family=&quot;sans-serif&quot;" font-size="5" fill="white">
+ <text x="4" y="8" text-anchor="middle">18</text>
+ <text x="12" y="16" text-anchor="middle">18</text>
+</g>
+</pattern>
+	<pattern id="fillpat19" patternUnits="userSpaceOnUse" width="16" height="16">
+<rect fill="#0272C1" x="0" y="0" width="16" height="16"></rect>
+<g font="family=&quot;sans-serif&quot;" font-size="5" fill="white">
+ <text x="4" y="8" text-anchor="middle">19</text>
+ <text x="12" y="16" text-anchor="middle">19</text>
+</g>
+</pattern>
+	<pattern id="fillpat20" patternUnits="userSpaceOnUse" width="16" height="16">
+<rect fill="#8C8C8C" x="0" y="0" width="16" height="16"></rect>
+<g font="family=&quot;sans-serif&quot;" font-size="5" fill="white">
+ <text x="4" y="8" text-anchor="middle">20</text>
+ <text x="12" y="16" text-anchor="middle">20</text>
+</g>
+</pattern>
+</defs>
+</svg>
+ <div id="container" class="course ">
+
+  <div id="header">
+   <div id="orgheader">
+
+
+        <div>                </div>
+          </div>
+
+<div id="mybutton-menu">
+ 
+<a id="myattendurl" href="https://atmnb.tsukuba.ac.jp/attend/tsukuba?lang=ja" target="_blank"><img src="./manaba - course_files/button_attend_header-ja.gif" onmouseout="ImageBlur(this)" onmouseover="ImageFocus(this)" alt="出席カード" title="出席カード"></a>
+
+
+                        <a href="https://manaba.tsukuba.ac.jp/ct/home_usermemo"><img src="./manaba - course_files/button_memolist_header-ja.gif" alt="メモ一覧" onmouseout="ImageBlur(this)" onmouseover="ImageFocus(this)" title="メモ一覧"></a>
+               
+                
+                  </div><!--mybutton-menu-->
+
+
+   
+   
+     
+           
+                               <div id="mylang" class="mylang-ja"><a href="https://manaba.tsukuba.ac.jp/ct/home_lang_en">English</a></div>
+                       
+          <hr>
+    
+           
+   
+    <div style="position:absolute;top:24px;right:190px;color:#FF0044">※自己登録許可期間中</div>
+  
+       <div id="myheader" style="width:650px">
+         <span id="mylinks-mydate">2018-01-24 (Wed)</span><br>
+        <div id="mylinks">
+      <span id="screenname"><a onclick="return manaba.userballoon(&#39;609918&#39;, event);" href="https://manaba.tsukuba.ac.jp/ct/course_781273_drill_882039_answerlog_1187834#">江畑　拓哉</a></span>
+                     <span class="mylinks-sep">|</span>
+        <span id="mylinks-preferences"><a href="https://manaba.tsukuba.ac.jp/ct/home_preferences">設定</a></span>
+                   <span class="mylinks-sep">|</span>
+      <span id="mylinks-logout"><span title="まだログアウトしていません。
+
+ログアウトして利用を終えたい場合は、全ブラウザを閉じてください。
+スマートフォン・タブレットをご利用の方は、各機器に応じた手順でブラウザアプリを終了してください。
+ブラウザを閉じないと、現在ログインしているユーザIDを無認証で利用継続されてしまう可能性があります。"></span><a href="https://manaba.tsukuba.ac.jp/ct/logout" onclick="alert(this.parentNode.firstChild.title);return false;">ログアウト</a>
+</span>
+     </div>
+           <img src="./manaba - course_files/user_609918_profileimage" width="40" height="40" alt="" title="">
+         </div>
+
+    <div id="mynavi">
+
+
+
+                  <div class="mynavi-button-home">
+        <a href="https://manaba.tsukuba.ac.jp/ct/home">
+         <img id="mypagelogo" src="./manaba - course_files/button_mynavi_mypage-ja1.gif" class="linkimage" onmouseover="ImageFocus(this)" onmouseout="ImageBlur(this)" alt="マイページ" title="マイページ">
+        </a>
+       </div>
+       
+       
+                             <div class="mynavi-button-course">
+
+                 <a href="https://manaba.tsukuba.ac.jp/ct/home_course">
+          <img src="./manaba - course_files/button_mynavi_course-ja1-in.gif" alt="コース" title="コース"></a>
+        
+        </div>
+       
+       
+               <div class="mynavi-button-portfolio">
+         <a href="https://manaba.tsukuba.ac.jp/ct/home_coursetable"><img src="./manaba - course_files/button_mynavi_portfolio-ja1.gif" onmouseover="ImageFocus(this)" onmouseout="ImageBlur(this)" alt="ポートフォリオ" title="ポートフォリオ"></a>
+        </div>
+       
+       
+           
+     
+     <div class="align"><span></span></div>
+    </div>
+   
+ 
+  </div>  <div class="pagebody "><!--pagebody start -->
+   <div>
+ 
+ 
+  <div class="pageheader-course pageheader-courseV2 pageheader-course-s pageheader-course-sV2  ">
+<div>
+  <div class="pageheader-course-courseicon">
+  <a href="https://manaba.tsukuba.ac.jp/ct/course_781273"><img src="./manaba - course_files/00.gif" id="courseicon" border="none" width="50" height="50" alt="" title=""></a>
+  </div>
+
+  <div class="pageheader-course-coursename" style="top:0">
+<div class="coursecode">GB13013</div>
+<a id="coursename" href="https://manaba.tsukuba.ac.jp/ct/course_781273" title="オブジェクト指向プログラミング実習">オブジェクト指向プログラミング実習</a>
+</div>
+
+
+
+
+      
+
+  
+  
+
+<div class="course-menu">
+      <div class="course-menu-query">
+    <a id="courseexam" href="https://manaba.tsukuba.ac.jp/ct/course_781273_query"><img src="./manaba - course_files/button_exam-ja1.png" class="inline linkimage" onmouseover="ImageFocus(this)" onmouseout="ImageBlur(this)" alt="小テスト" title="小テスト"></a><span class="my-unreadcount" id="examstatus">2</span>   </div>
+   
+      <div class="course-menu-survey">
+    <a id="courseexam" href="https://manaba.tsukuba.ac.jp/ct/course_781273_survey"><img src="./manaba - course_files/button_survey-ja1.png" class="inline linkimage" onmouseover="ImageFocus(this)" onmouseout="ImageBlur(this)" alt="アンケート" title="アンケート"></a>   </div>
+   
+      <div class="course-menu-report">
+    <a id="coursereport" href="https://manaba.tsukuba.ac.jp/ct/course_781273_report"><img src="./manaba - course_files/button_report-ja1.png" class="inline linkimage" onmouseover="ImageFocus(this)" onmouseout="ImageBlur(this)" alt="レポート" title="レポート"></a>
+       </div>
+   
+      <div class="course-menu-project">
+         <a href="https://manaba.tsukuba.ac.jp/ct/course_781273_project">
+      <img class="inline linkimage" src="./manaba - course_files/button_project-ja1.png" border="0" onmouseover="ImageFocus(this)" onmouseout="ImageBlur(this)" alt="プロジェクト" title="プロジェクト">
+     </a>
+     <span class="my-unreadcount" id="reportstatus">2</span>       </div>
+   
+      <div class="course-menu-grade">
+         <a id="coursegrade" href="https://manaba.tsukuba.ac.jp/ct/course_781273_grade"><img src="./manaba - course_files/button_grade-ja1.png" class="inline linkimage" onmouseover="ImageFocus(this)" onmouseout="ImageBlur(this)" alt="成績" title="成績"></a>
+           </div>
+   
+  <div class="course-menu-bbs">
+  <a id="coursebbs" href="https://manaba.tsukuba.ac.jp/ct/course_781273_topics"><img src="./manaba - course_files/button_bbs-ja1.png" class="inline linkimage" onmouseover="ImageFocus(this)" onmouseout="ImageBlur(this)" alt="掲示板" title="掲示板"></a>
+   </div>
+ 
+  <div class="course-menu-coursecontents">
+     <a id="coursecontents" href="https://manaba.tsukuba.ac.jp/ct/course_781273_page"><img src="./manaba - course_files/button_course_contents-ja1.png" class="inline linkimage" onmouseover="ImageFocus(this)" onmouseout="ImageBlur(this)" alt="コースコンテンツ" title="コースコンテンツ"></a>
+   </div>
+ 
+</div>
+
+
+ <div class="pageheader-course-courseteacher" title="前田 敦司"><span class="courseteacher-name">
+   担当教員: <span class="courseteacher" title="前田 敦司">前田 敦司   </span></span>
+  
+<span class="coursedata-info">
+2017&nbsp;<span title="秋C 水1,2、木3,4">秋C 水1,2、木3,4</span></span>
+
+ </div>
+
+     </div>
+</div>
+ 
+
+   <!-- BBB -->
+                                                                                                                                 <div class="contentbody-s">
+<h1>正解</h1>
+
+<div id="queryouterframe">
+ <div id="queryinnerframe">
+  <div class="queryv4 query-drill ">
+   <table class="query queryshow">
+    <tbody><tr class="title">
+     <th>正解 (2回目)</th>
+    </tr>
+    <tr>
+     <td class="querystatus">
+      合計点 <span>18</span>
+             設問数 <span>6</span>
+           </td>
+    </tr>
+    <tr>
+     <td class="querybody " style="padding:24px 30px !important;">
+       <div class="reporttext">
+  <div class="reporttext-title">問題</div>
+  <div class="reporttext-body">課題2・3に関する問題です．
+<br>ランダムに問題が出題されます．
+<br>点数は最終成績に関係ありません．
+<br>課題クリアの判定だけに使うドリルです．</div>
+ </div>
+
+  
+      <div class="querypaper articlebody" style="padding:10px;">
+       <h1>課題2: 質問1<br></h1><pre><p>次のうちクラスの継承について<u><b>誤っているものをすべて</b></u>選びなさい．</p><ol class="multiselection required genc_m__" id="qid1"><li><input type="checkbox" disabled="" class="checkbox" name="qid1" id="qid1_1" value="1" onkeydown="return event.keyCode != 13;"><label for="qid1_1">クラスAがクラスBを継承するとき，クラスAをクラスBのサブクラスと呼ぶ</label></li><li><input type="checkbox" disabled="" class="checkbox" name="qid1" id="qid1_2" value="2" onkeydown="return event.keyCode != 13;"><label for="qid1_2">あるクラスを継承するサブクラスが複数存在することもある</label></li><li class="checked"><input type="checkbox" disabled="" class="checkbox" name="qid1" id="qid1_3" value="3" checked="" onkeydown="return event.keyCode != 13;"><label for="qid1_3">あるクラスのスーパークラスが複数存在することもある</label></li><li><input type="checkbox" disabled="" class="checkbox" name="qid1" id="qid1_4" value="4" onkeydown="return event.keyCode != 13;"><label for="qid1_4">サブクラスは，スーパークラスに定義されている変数やメソッドを引き継ぐ</label></li></ol><span><span class="pointform"><input type="text" readonly="" class="point" value="4">点</span></span> <p></p></pre><span></span><p></p><pre><br></pre><hr><p>SimpleViewクラスで，もし<u><b>turnメソッドを定義しなかったら(定義を取り除いたら)</b></u>どうなるか考える．</p><p>以下のうち，<u><b>正しいものすべて</b></u>を選びなさい．<strong class="query_required_marker"><font color="red">(選択必須)</font></strong></p><ol class="multiselection required genc_m__" id="qid2"><li class="checked"><input type="checkbox" disabled="" class="checkbox" name="qid2" id="qid2_1" value="1" checked="" onkeydown="return event.keyCode != 13;"><label for="qid2_1">他に何も変更しないままだとコンパイルエラーになる</label></li><li><input type="checkbox" disabled="" class="checkbox" name="qid2" id="qid2_2" value="2" onkeydown="return event.keyCode != 13;"><label for="qid2_2">他に何も変更しなくてもコンパイルはできるが，実行するとエラーになる<br></label></li><li class="checked"><input type="checkbox" disabled="" class="checkbox" name="qid2" id="qid2_3" value="3" checked="" onkeydown="return event.keyCode != 13;"><label for="qid2_3">SimpleViewを抽象クラスに変えればコンパイルできる</label></li><li class="checked"><input type="checkbox" disabled="" class="checkbox" name="qid2" id="qid2_4" value="4" checked="" onkeydown="return event.keyCode != 13;"><label for="qid2_4">turnメソッドを定義しない限り，SimpleViewのインスタンスを作ることはできない<br></label></li><li class="checked"><input type="checkbox" disabled="" class="checkbox" name="qid2" id="qid2_5" value="5" checked="" onkeydown="return event.keyCode != 13;"><label for="qid2_5">RobotModelからview.turnを呼び出しているので，viewフィールドに入れるオブジェクトではturnメソッドを具体的に定義する必要がある</label></li></ol><span><span class="pointform"><input type="text" readonly="" class="point" value="5">点</span></span><br><p></p><hr><h1>課題2: 設問1</h1><p>Omikuji3Testのmainの中から呼ばれるprintメソッドは，どのクラス内で定義されているか?<strong class="query_required_marker"><font color="red">(選択必須)</font></strong></p><p></p><ol class="queryselection required genc_s__" id="qid3"><li class="checked"><input type="radio" class="radio" disabled="" name="qid3" id="qid3_1" value="1" checked="" onkeydown="return event.keyCode != 13;"><label for="qid3_1">Omikuji<br></label></li><li><input type="radio" class="radio" disabled="" name="qid3" id="qid3_2" value="2" onkeydown="return event.keyCode != 13;"><label for="qid3_2">Omikuji2<br></label></li><li><input type="radio" class="radio" disabled="" name="qid3" id="qid3_3" value="3" onkeydown="return event.keyCode != 13;"><label for="qid3_3">Omikuji3</label></li><li><input type="radio" class="radio" disabled="" name="qid3" id="qid3_4" value="4" onkeydown="return event.keyCode != 13;"><label for="qid3_4">Omikuji4</label></li></ol><span> <span class="pointform"><input type="text" readonly="" class="point" value="1">点</span></span><p></p><p><br></p><p>上記のprintメソッドから呼び出されるfirstメソッドの実体はどのクラス内で定義されているか?<strong class="query_required_marker"><font color="red">(選択必須)</font></strong></p><p></p><ol class="queryselection required genc_s__" id="qid4"><li><input type="radio" class="radio" disabled="" name="qid4" id="qid4_1" value="1" onkeydown="return event.keyCode != 13;"><label for="qid4_1">Omikuji</label></li><li class="checked"><input type="radio" class="radio" disabled="" name="qid4" id="qid4_2" value="2" checked="" onkeydown="return event.keyCode != 13;"><label for="qid4_2">Omikuji2<br></label></li><li><input type="radio" class="radio" disabled="" name="qid4" id="qid4_3" value="3" onkeydown="return event.keyCode != 13;"><label for="qid4_3">Omikuji3</label></li><li><input type="radio" class="radio" disabled="" name="qid4" id="qid4_4" value="4" onkeydown="return event.keyCode != 13;"><label for="qid4_4">Omikuji4</label></li></ol><span> <span class="pointform"><input type="text" readonly="" class="point" value="1">点</span></span><p></p><p><br></p><p>同じく，printメソッドから呼び出されるsecondメソッドの実体はどのクラス内で定義されているか?<strong class="query_required_marker"><font color="red">(選択必須)</font></strong></p><p></p><ol class="queryselection required genc_s__" id="qid5"><li><input type="radio" class="radio" disabled="" name="qid5" id="qid5_1" value="1" onkeydown="return event.keyCode != 13;"><label for="qid5_1">Omikuji</label></li><li><input type="radio" class="radio" disabled="" name="qid5" id="qid5_2" value="2" onkeydown="return event.keyCode != 13;"><label for="qid5_2">Omikuji2<br></label></li><li class="checked"><input type="radio" class="radio" disabled="" name="qid5" id="qid5_3" value="3" checked="" onkeydown="return event.keyCode != 13;"><label for="qid5_3">Omikuji3</label></li><li><input type="radio" class="radio" disabled="" name="qid5" id="qid5_4" value="4" onkeydown="return event.keyCode != 13;"><label for="qid5_4">Omikuji4<br></label></li></ol><span> <span class="pointform"><input type="text" readonly="" class="point" value="1">点</span></span><br><p></p><hr><h1>質問4</h1><p>次のようにクラスA,B,Cが定義されている．<br><br><br>&nbsp;class A { } <br>&nbsp;class B extends A { } <br>&nbsp;class C { }<br><br>次の変数の宣言と代入で<u><b>誤りがあるものすべて</b></u>を選びなさい．(選択必須)</p><strong class="query_required_marker"><font color="red"></font></strong><ol class="multiselection required genc_m__" id="qid6"><li><input type="checkbox" disabled="" class="checkbox" name="qid6" id="qid6_1" value="1" onkeydown="return event.keyCode != 13;"><label for="qid6_1">A a = new A();</label></li><li><input type="checkbox" disabled="" class="checkbox" name="qid6" id="qid6_2" value="2" onkeydown="return event.keyCode != 13;"><label for="qid6_2">A a = new B();</label></li><li class="checked"><input type="checkbox" disabled="" class="checkbox" name="qid6" id="qid6_3" value="3" checked="" onkeydown="return event.keyCode != 13;"><label for="qid6_3">A a = new C();</label></li><li class="checked"><input type="checkbox" disabled="" class="checkbox" name="qid6" id="qid6_4" value="4" checked="" onkeydown="return event.keyCode != 13;"><label for="qid6_4">B b = new A();</label></li><li><input type="checkbox" disabled="" class="checkbox" name="qid6" id="qid6_5" value="5" onkeydown="return event.keyCode != 13;"><label for="qid6_5">B b = new B();</label></li><li class="checked"><input type="checkbox" disabled="" class="checkbox" name="qid6" id="qid6_6" value="6" checked="" onkeydown="return event.keyCode != 13;"><label for="qid6_6">B b = new C();</label></li></ol><span><span class="pointform"><input type="text" readonly="" class="point" value="6">点</span></span><br><p></p><p><br></p>                            </div>
+     </td>
+    </tr>
+   </tbody></table>
+  </div>
+ </div>
+</div>
+</div>
+                                                                                           
+                           
+                   
+   
+   
+      
+       
+    
+             
+   
+   
+         
+   
+                                                            
+   
+   
+          
+          
+   
+   
+   
+   
+   
+   
+   
+          
+      
+</div>
+   
+     </div><!--pagebody end -->
+    
+  <div class="pagefooter pagefooterV2 pagefooterV3 "><!--pagefooter start -->
+    <div class="footer-manual-link">
+    
+   <a href="https://manaba.tsukuba.ac.jp/ct/doc_student" target="_blank">
+   <img src="./manaba - course_files/marker-download02.gif" class="inline" alt="" title="">マニュアル  </a>
+ 
+  </div>
+      <div id="systemversion" style="text-align:left;padding-left:5px;width:200px;">manaba 2.89</div><!--pagefooter end -->
+  </div>  <div style="display:none;" id="userballoon_loading_skelton"><!-- MARKER_BALLOON --><!-- この行は必ず先頭行に置く / 編集禁止 -->
+<div class="balloonpointer"><span></span></div>
+<div class="userballoonframe">
+<div class="baloonclose"><img src="./manaba - course_files/button_baloon_close.gif" onclick="return manaba.userballoon_close(event);" title=""></div>
+<div class="userballooncontent">
+<table style="border-bottom:1px dotted #bfbfbf">
+<tbody><tr>
+<td>NOW LOADING...</td>
+</tr>
+</tbody></table>
+
+</div>
+<div class="userballoonfooter">&nbsp;</div>
+</div>
+
+</div>
+ </div>
+
+
+
+<div id="UMS_TOOLTIP" style="position: absolute; cursor: pointer; z-index: 2147483647; background: transparent; top: -100000px; left: -100000px;"></div></body><umsdataelement id="UMSSendDataEventElement"></umsdataelement><div id="TAG_ID4TOOLBAR_UMS_GUID" style="display: none;">A5C998EC-B9D6-09A2-6A5E-3EC1C158EC61</div><div id="tmtoolbar_ums_injected" style="display: none;">init_ums</div><div id="TAG_ID4TOOLBAR_GUID" style="display: none;">E8963F78-FDA2-24BF-F651-6039F4859E51</div><div id="tmtoolbar_message" style="display: none;">init</div><div id="tmtoolbar_injected" style="display: none;">init</div></html>
