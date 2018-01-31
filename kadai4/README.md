@@ -116,6 +116,9 @@ Javaでは，「集合」「列」「写像」などの
   セット    
   Scanner    
   はイテレータとして機能する    
+  ・HashSetの性質
+  Setで定義されたメソッドをすべて持っている
+  HashSetのインスタンスを Collection型の変数に入れることができる
 ***
 
 [`java.util.Map`](http://docs.oracle.com/javase/jp/7/api/java/util/Map.html)[]()
