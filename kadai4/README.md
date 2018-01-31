@@ -104,6 +104,20 @@ Javaでは，「集合」「列」「写像」などの
 
 などが用意されている．
 
+***
+ 追記　elect
+ ・Listの性質
+ 同じオブジェクトoをn回追加すれば、size()は常にn増える
+ Iteratorによって要素を取り出せば、addした順番に取り出すことができる
+ containsメソッドをもちいて要素が入っているかを調べるためには、O(size()) のコストがかかる
+ ・イテレータ
+  配列
+  リスト
+  セット
+  Scanner
+  はイテレータとして機能する
+***
+
 [`java.util.Map`](http://docs.oracle.com/javase/jp/7/api/java/util/Map.html)[]()
 
 写像（キーから値への対応づけの集合）を表すインターフェースで，実装としては
@@ -202,7 +216,7 @@ LinkedHashSetのどれであっても，同じように行なうことができ�
 ``` {.program}
 import java.util.*;
 
-class ListTest {
+class Test {
   public static void main(String[] args) {
     List<String> list = new LinkedList<String>();
     for (int i = 0;i < args.length; i++) {
