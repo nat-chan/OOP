@@ -12,3 +12,6 @@
 # 前田先生がpublic_htmlにzipを置いているので追加
 *.bak
 *.zip
+
+# eclimがかってに作る奴
+.project
