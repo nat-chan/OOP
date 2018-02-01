@@ -1,4 +1,4 @@
-public class Ratio {
+public class Ratio implements Numeric<Ratio> {
     private long num;    // 分子
     private long denom;  // 分母
 
@@ -89,8 +89,4 @@ public class Ratio {
         return multiply(1, i);
     }
 
-    @override
-    public String toString() {
-        return this.num + "/" + this.denom;
-    }
 }
