@@ -12,3 +12,9 @@
 # 前田先生がpublic_htmlにzipを置いているので追加
 *.bak
 *.zip
+
+# gradle の隠しファイル
+*/.gradle
+
+# meghanada の隠しファイル
+*/.meghanada
