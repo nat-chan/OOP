@@ -1,25 +1,52 @@
-import java.util.*;
-public class RatioCalc extends OOGCalc<RatioCalc.Ratio>
+import java.util.Deque;
+public class RatioCalc extends OOGCalc<RatioCalc.Rat>
 {
-    class Ratio implements Numeric<Ratio> {
-        long num;
-        long denom;
-        Ratio(long num, long denom) {
-            this.num = num;
-            this.denom = denom;
+    static class Rat implements Numeric<Rat> {
+        Ratio ratio;
+        Rat (int i) {
+            ratio = new Ratio(i, 1);
         }
-        public Ratio add(Ratio v) { return (new Ratio(this.num, this.denom)).add(v); }
-        public Ratio subtract(Ratio v) { return (new Ratio(this.num, this.denom)).subtract(v); }
-        public Ratio multiply(Ratio v) { return (new Ratio(this.num, this.denom)).multiply(v); }
-        public Ratio divide(Ratio v) { return (new Ratio(this.num, this.denom)).divide(v); }
-        public String toString() { return (new Ratio(this.num, this.denom)).toString(); }
+        Rat (Ratio r) {
+            ratio = r;
+        }
+        public Rat add(Rat r) {
+            return new Rat (ratio.add (r.ratio));
+        }
+        public Rat subtract (Rat r) {
+            return new Rat (ratio.subtract (r.ratio));
+        }
+        public Rat multiply (Rat r) {
+            return new Rat (ratio.multiply (r.ratio));
+        }
+        public Rat divide (Rat r) {
+            return new Rat (ratio.divide (r.ratio));
+        }
+
+        public String toString () {
+            return ratio.toString ();
+        }
     }
-    protected Ratio fromRatio(long num, long denom) {
-        
-        return new Ratio(num, denom);
+
+    protected Rat fromInt(int v) {
+        return new Rat (v);
     }
-    public static void main(String args[])
-    {
-        new RatioCalc().run();
+    class NoOp extends Op {
+        public String opName () {
+            return "noop";
+        }
+        public void exec (Deque<Rat> stack) {
+        }
+    }
+    String [] [] alias = {{"足す", "+"}, {"引く", "-"}, {"かける", "*"}, {"割る", "/"},
+                          {"から", "noop"}, {"と", "noop"}, {"を", "noop"}, {"で", "noop"}};
+    RatioCalc() {
+        ops.put ("noop", new NoOp ());
+        for (String [] pair : alias) {
+            System.out.println(ops.get (pair [1]));
+            ops.put (pair [0], ops.get (pair [1]));
+        }
+    }
+    public static void main(String args[]) {
+        new RatioCalc ().run ();
     }
 }
