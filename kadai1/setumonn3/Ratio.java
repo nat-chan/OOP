@@ -1,84 +1,85 @@
 public class Ratio {
-    private long num;    // 分子
-    private long denom;  // 分母
+	private long num;    // 分子
+	private long denom;  // 分母
 
-    public Ratio(long num, long denom) {
-        if (denom < 0) {
-            num *= -1;
-            denom *= -1;
-        }
-        long g = gcd(num, denom);    // 約分するために最大公約数を求める.
-        this.num = num / g;
-        this.denom = denom / g;
-    }
-    // クラスの外には見せないメソッド
-    private long gcd(long p, long q) {
-      // 最大公約数を計算する.
-      「(1)」
-    }
-    private Ratio multiply(long num, long denom) {
-        long n = 「(2)」 ;
-        long d = 「(3)」 ;
-        return new Ratio(n, d);
-    }
-    private  Ratio add(long num, long denom) {
-        long n = 「(4)」 ;
-        long d = 「(5)」 ;
-        return new Ratio(n, d);
-    }
+	public Ratio(long num, long denom) {
+		if (denom < 0) {
+			num *= -1;
+			denom *= -1;
+		}
+		long g = gcd(num, denom);    // 約分するために最大公約数を求める.
+		this.num = num / g;
+		this.denom = denom / g;
+	}
+	// クラスの外には見せないメソッド
+	private long gcd(long p, long q) {
+		// 最大公約数を計算する.
+		//DONE 1
+		return q==0 ? p : gcd(q, p%q);
+	}
+	private Ratio multiply(long num, long denom) {
+		long n = this.num   * num;   //TODO 2
+		long d = this.denom * denom; //TODO 3
+		return new Ratio(n, d);
+	}
+	private  Ratio add(long num, long denom) {
+		long n = this.num*denom + num*this.denom; //TODO 4
+		long d = this.denom * denom; //TODO 5
+		return new Ratio(n, d);
+	}
 
-    // 公開するメソッド
-    public double doubleValue() {
-        return (double)num / (double)denom;
-    }
+	// 公開するメソッド
+	public double doubleValue() {
+		return (double)num / (double)denom;
+	}
 
-    public String toString() {
-        // 文字列に変換する
-        if (denom == 1) {
-            return Long.toString(num);
-        } else {
-            return num + "/" + denom;
-        }
-    }
-    public boolean equals(Object obj) {
-    // objがthisと等しければtrue,さもなければfalse
-        if (obj instanceof Ratio) {
-            Ratio r = (Ratio)obj;
-            return denom == r.denom && num == r.num;
-        } else {
-            return false;
-        }
-    }
+	public String toString() {
+		// 文字列に変換する
+		if (denom == 1) {
+			return Long.toString(num);
+		} else {
+			return num + "/" + denom;
+		}
+	}
+	public boolean equals(Object obj) {
+	// objがthisと等しければtrue,さもなければfalse
+		if (obj instanceof Ratio) {
+			Ratio r = (Ratio)obj;
+			return denom == r.denom && num == r.num;
+		} else {
+			return false;
+		}
+	}
 
-    // 分数どうしの加減乗除
-    public Ratio add(Ratio r) {
-        // thisとrを足した結果のRatioを作って返す
-        return add(r.num, r.denom);
-    }
-    public Ratio subtract(Ratio r) {
-        // thisからrを引いた結果のRatioを作って返す
-        return 「(6)」;          // addを使う.
-    }
-    public Ratio multiply(Ratio r) {
-        // thisとrをかけた結果のRatioを作って返す
-        return multiply(r.num, r.denom);
-    }
-    public Ratio divide(Ratio r) {
-        // thisをrで割った結果のRatioを作って返す
-        return 「(7)」;          // multiplyを使う.
-    }
+	// 分数どうしの加減乗除
+	public Ratio add(Ratio r) {
+		// thisとrを足した結果のRatioを作って返す
+		return add(r.num, r.denom);
+	}
+	public Ratio subtract(Ratio r) {
+		// thisからrを引いた結果のRatioを作って返す
+		return add(-r.num, r.denom); //DONE 6 // addを使う.
+	}
+	public Ratio multiply(Ratio r) {
+		// thisとrをかけた結果のRatioを作って返す
+		return multiply(r.num, r.denom);
+	}
+	public Ratio divide(Ratio r) {
+		// thisをrで割った結果のRatioを作って返す
+		return multiply(r.denom, r.num); //DONE 7 // multiplyを使う.
+	}
 
-    // 整数との加減乗除
-    public Ratio add(long i) {
-        return add(i, 1);
-    }
-    public Ratio subtract(long i) {
-        return 「(8)」;
-    }
-    public Ratio multiply(long i) {
-        return multiply(i, 1);
-    }
-    public Ratio divide(long i) {
-        return 「(9)」;
-    }
+	// 整数との加減乗除
+	public Ratio add(long i) {
+		return add(i, 1);
+	}
+	public Ratio subtract(long i) {
+		return add(-i, 1); //DONE 8
+	}
+	public Ratio multiply(long i) {
+		return multiply(i, 1);
+	}
+	public Ratio divide(long i) {
+		return multiply(1, i); //DONE 9
+	}
 }
