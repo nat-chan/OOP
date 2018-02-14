@@ -4,35 +4,44 @@ import java.util.HashMap;
 public class TreeScript2 extends TreeScript1 {
 
   class NameLeaf2 extends NameLeaf {
-    NameLeaf2(String name) { super(name); }
+    NameLeaf2(String name) {
+      super(name);
+    }
+
     @Override
     public Tree eval() {
-      if (funcs.containsKey (name)) {
-        return funcs.get (name);
+      if (funcs.containsKey(name)) {
+        return funcs.get(name);
       }
       return this;
     }
   }
 
   Map<String, Tree> funcs;
+
   class DefOp extends Op {
-    public String opName () { return "def"; }
-    public Tree calc (Tree name, Tree E) {
-      funcs.put (((NameLeaf2) name).name, E);
+    public String opName() {
+      return "def";
+    }
+
+    public Tree calc(Tree name, Tree E) {
+      funcs.put(((NameLeaf2) name).name, E);
       return name;
     }
   }
 
   class CallOp2 extends Op {
-    public String opName() { return "call"; }
+    public String opName() {
+      return "call";
+    }
+
     public Tree calc(Tree left, Tree right) {
       Node fun = (Node) left.eval();
       NameLeaf2 param;
       try {
-        param = (NameLeaf2)fun.left ;
-      }
-      catch (ClassCastException e) {
-        param = new NameLeaf2(((NameLeaf)fun.left).name) ;
+        param = (NameLeaf2) fun.left;
+      } catch (ClassCastException e) {
+        param = new NameLeaf2(((NameLeaf) fun.left).name);
       }
       Tree body = fun.right;
       Tree expression = body.replace(param.name, right);
@@ -59,7 +68,7 @@ public class TreeScript2 extends TreeScript1 {
 
   TreeScript2() {
     funcs = new HashMap<String, Tree>();
-    ops.put ("def", new DefOp ());
+    ops.put("def", new DefOp());
     ops.remove("call");
     ops.put("call", new CallOp2());
   }
@@ -68,4 +77,3 @@ public class TreeScript2 extends TreeScript1 {
     new TreeScript2().run();
   }
 }
-
