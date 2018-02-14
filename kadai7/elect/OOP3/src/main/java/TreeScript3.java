@@ -22,7 +22,30 @@ public class TreeScript3 extends TreeScript2 {
         return t;
       }
     }
-
+    public Tree create_expression (NameLeaf2 param, Tree body, Tree replace) {
+      if (body instanceof Node) {
+        try {
+          if (((((Node) body).operator) instanceof FunOp)
+              && ((((NameLeaf2) (((Node) body).left))).name).equals (param.name)) {
+            return body;
+          } else {
+            return new Node (((Node) body).operator,
+                             create_expression (param, (((Node) body).left), replace),
+                             create_expression (param, (((Node) body).right) ,replace));
+          }
+        } catch (ClassCastException e) {
+          if (((((Node) body).operator) instanceof FunOp)
+              && ((((NameLeaf) (((Node) body).left))).name).equals (param.name)) {
+            return body;
+          } else {
+            return new Node (((Node) body).operator,
+                             create_expression (param, (((Node) body).left), replace),
+                             create_expression (param, (((Node) body).right) ,replace));
+          }
+        }
+      }
+      return body.replace (param.name, replace);
+    }
     @Override
     public Tree calc (Tree left, Tree right) {
       Node fun = (Node) left.eval ();
@@ -34,20 +57,7 @@ public class TreeScript3 extends TreeScript2 {
       }
       Tree body = fun.right;
       Tree expression;
-      expression = body.replace(param.name, (rep(right)));
-      if (body instanceof Node) {
-        if ((((Node) body).operator) instanceof CallOp3) {
-          if ((((Node) (((Node) body).left)).left instanceof NameLeaf2)) {
-            if (((NameLeaf2) ((Node) ((Node) body).left).left).name.equals (param.name)) {
-
-              expression = new Node ((((Node) body).operator),
-                                     (((Node) body).left),
-                                     (((Node) body).right.replace (param.name, (rep (right)))));
-            }
-          }
-        }
-      }
-
+      expression = create_expression (param, body, (rep (right)));
       System.out.println("置換: " + expression.toString());
       return expression.eval();
     }

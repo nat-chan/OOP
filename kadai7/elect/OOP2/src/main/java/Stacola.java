@@ -2,7 +2,7 @@ public class Stacola extends LCalc {
 
   RobotModel robot;
   ScreenView view;
-  
+
   class ForwardOp extends Op {
     public String opName () {
       return "進む";
