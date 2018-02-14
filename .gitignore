@@ -18,3 +18,7 @@
 
 # meghanada の隠しファイル
 */.meghanada
+
+# eclimが勝手に作るやつ
+.project
+.classpath
