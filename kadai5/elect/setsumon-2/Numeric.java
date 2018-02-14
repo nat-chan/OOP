@@ -1,3 +1,5 @@
+import java.util.*;
+
 public interface Numeric<E extends Numeric> {
     public E add(E num);
     public E subtract(E num);

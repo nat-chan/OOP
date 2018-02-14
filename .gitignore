@@ -13,5 +13,8 @@
 *.bak
 *.zip
 
-# eclimがかってに作る奴
-.project
+# gradle の隠しファイル
+*/.gradle
+
+# meghanada の隠しファイル
+*/.meghanada

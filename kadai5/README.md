@@ -515,7 +515,7 @@ IntCalcを参考に， 以前に作った[Ratio](oo_basics.html#ratio)を用い�
 
 ``` {.interaction}
 $ java RatioCalc
-3 から 1 を 引く=
+3 から 1 を 引く =
 2
 6 を かける =
 12
